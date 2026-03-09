@@ -1,0 +1,16 @@
+Neos:
+  Neos:
+    Ui:
+      resources:
+        javascript:
+          '@carbon/slideshoweditor':
+            resource: 'resource://Carbon.SlideshowEditor/Public/JavaScript/Plugin.js'
+        stylesheets:
+          '@carbon/slideshoweditor':
+            resource: 'resource://Carbon.SlideshowEditor/Public/JavaScript/Plugin.css'
+
+    userInterface:
+      inspector:
+        dataTypes:
+          Carbon\SlideshowEditor\Slideshow:
+            editor: Carbon.SlideshowEditor/Inspector/Editors/SlideshowEditor

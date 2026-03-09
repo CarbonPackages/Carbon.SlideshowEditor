@@ -1,0 +1,13 @@
+{
+    "name": "@carbon/slideshoweditor-plugin",
+    "license": "GPL-3.0",
+    "version": "",
+    "scripts": {
+        "build": "node esbuild.js",
+        "watch": "node esbuild.js --watch"
+    },
+    "dependencies": {
+        "@carbon/slideshoweditor-core": "workspace:*",
+        "@neos-project/neos-ui-extensibility": "~9.1.4"
+    }
+}

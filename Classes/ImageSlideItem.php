@@ -7,36 +7,32 @@ namespace Carbon\SlideshowEditor;
 use Neos\Flow\Annotations as Flow;
 
 #[Flow\Proxy(false)]
-final readonly class Slideshow implements \JsonSerializable
+final readonly class ImageSlideItem implements SlideItemInterface
 {
-    /** @var array<Slide> */
-    public array $items;
-
     public function __construct(
-        Slide ...$items
+        public string $imageId,
     ) {
-        $this->items = $items;
     }
 
     /** @param array<int|string,mixed> $array */
     public static function fromArray(array $array): self
     {
         return new self(
-            ...array_map(Slide::fromArray(...), $array),
+            imageId: $array['imageId'],
         );
     }
 
     /** @return iterable<string> */
     public function extractAssetIds(): iterable
     {
-        foreach ($this->items as $item) {
-            yield from $item->extractAssetIds();
-        }
+        yield $this->imageId;
     }
 
     /** @return array<int|string,mixed> */
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
-        return $this->items;
+        return [
+            'imageId' => $this->imageId,
+        ];
     }
 }

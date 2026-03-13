@@ -1,0 +1,9 @@
+{
+    "name": "@carbon/slideshoweditor-editor",
+    "license": "GPL-3.0",
+    "main": "./src/index.ts",
+    "version": "",
+    "dependencies": {
+        "@carbon/slideshoweditor-core": "workspace:*"
+    }
+}

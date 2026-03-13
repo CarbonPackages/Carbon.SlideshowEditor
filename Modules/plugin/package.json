@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "@carbon/slideshoweditor-core": "workspace:*",
+        "@carbon/slideshoweditor-editor": "workspace:*",
         "@neos-project/neos-ui-extensibility": "~9.1.4"
     }
 }

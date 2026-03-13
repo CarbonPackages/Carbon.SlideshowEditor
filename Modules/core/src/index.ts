@@ -1,2 +1,2 @@
-export {createDialog, createNestedDialog, createInspectorEditor} from './application';
-export {createEditor} from './domain';
+export type {IEditor, ISlideshow} from './domain/index.ts';
+export {createEditor, SlideshowBuilder, ImageSlideItemBuilder} from './domain/index.ts';

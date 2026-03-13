@@ -1,5 +1,6 @@
 
-import {createDialog, createNestedDialog, createEditor, createInspectorEditor} from '@carbon/slideshoweditor-core';
+import {createEditor} from '@carbon/slideshoweditor-core';
+import {createDialog, createNestedDialog, createInspectorEditor} from '@carbon/slideshoweditor-editor';
 
 import manifest from '@neos-project/neos-ui-extensibility';
 

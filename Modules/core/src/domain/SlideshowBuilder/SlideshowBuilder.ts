@@ -1,0 +1,136 @@
+import type {ISlideshow} from "../Slideshow";
+import {SlideBuilder} from "./SlideBuilder.ts";
+
+export class SlideshowBuilder
+{
+    private slideBuilders: SlideBuilder[];
+
+    private constructor(
+        private readonly data: {
+            readonly orderedSlideIds: string[],
+            readonly slideBuilderMap: {
+                [id: string]: SlideBuilder
+            }
+            readonly isDirty: boolean;
+        }
+    ) {
+        const slideBuilders = [];
+        for (const slideId of this.data.orderedSlideIds) {
+            const slideBuilder = this.data.slideBuilderMap[slideId];
+            slideBuilders.push(
+                slideBuilder
+            );
+        }
+        this.slideBuilders = slideBuilders;
+    }
+
+    public static createFromValue(value: ISlideshow | null): SlideshowBuilder
+    {
+        const orderedSlideIds = [];
+        const slideBuilderMap = {};
+
+        for (const slide of value ?? []) {
+            const slideBuilder = SlideBuilder.createFromValue(slide);
+            orderedSlideIds.push(slideBuilder.id);
+            slideBuilderMap[slideBuilder.id] = slideBuilder;
+        }
+
+        return new SlideshowBuilder({
+            orderedSlideIds,
+            slideBuilderMap,
+            isDirty: false,
+        });
+    }
+
+    public get isDirty(): boolean
+    {
+        return this.data.isDirty || Object.values(this.data.slideBuilderMap).some((slideBuilder: SlideBuilder) => slideBuilder.isDirty);
+    }
+
+    public get slides(): SlideBuilder[]
+    {
+        return this.slideBuilders;
+    }
+
+    public getSlideIdForIndex(index: number): string | null
+    {
+        return this.data.orderedSlideIds[index] ?? null;
+    }
+
+    public withMovedSlide(slideId: string, newSucceedingSlideId: string): SlideshowBuilder
+    {
+        this.assertSlideExists(slideId);
+        this.assertSlideExists(newSucceedingSlideId);
+
+        if (slideId === newSucceedingSlideId) {
+            return this;
+        }
+
+        const succeedingSlideIndex = this.data.orderedSlideIds.indexOf(newSucceedingSlideId);
+
+        const slideIdsWithoutMoved = this.data.orderedSlideIds.filter(id => id !== slideId);
+        const precedingPart = slideIdsWithoutMoved.slice(0, succeedingSlideIndex);
+        const succeedingPart = slideIdsWithoutMoved.slice(succeedingSlideIndex);
+
+        const orderedSlideIds = [...precedingPart, slideId, ...succeedingPart];
+
+        return new SlideshowBuilder({
+            ...this.data,
+            isDirty: true,
+            orderedSlideIds,
+        })
+    }
+
+    public withNewSlide(): SlideshowBuilder
+    {
+        const slideBuilder = SlideBuilder.createFromValue(null);
+
+        const {orderedSlideIds, slideBuilderMap} = this.data;
+
+        orderedSlideIds.push(slideBuilder.id);
+        slideBuilderMap[slideBuilder.id] = slideBuilder;
+
+        return new SlideshowBuilder({
+            ...this.data,
+            isDirty: true,
+            orderedSlideIds,
+            slideBuilderMap,
+        });
+    }
+
+    public withUpdatedSlide(slideBuilder: SlideBuilder): SlideshowBuilder
+    {
+        this.assertSlideExists(slideBuilder.id);
+
+        const {slideBuilderMap} = this.data;
+
+        slideBuilderMap[slideBuilder.id] = slideBuilder;
+
+        return new SlideshowBuilder({
+            ...this.data,
+            isDirty: true,
+            slideBuilderMap,
+        });
+    }
+
+    private assertSlideExists(slideId: string): void
+    {
+        if (!this.data.orderedSlideIds.includes(slideId)) {
+            throw new Error(`Slide does not exist but was supposed to: "${slideId}"`);
+        }
+    }
+
+    public build(): ISlideshow
+    {
+        const slideshow = [];
+
+        for (const slideId of this.data.orderedSlideIds) {
+            const slideBuilder = this.data.slideBuilderMap[slideId];
+            slideshow.push(
+                slideBuilder.build()
+            );
+        }
+
+        return slideshow;
+    }
+}

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {Button, Dialog} from '@neos-project/react-ui-components';
 
-import {IEditor} from '../../domain';
+import type {IEditor} from '@carbon/slideshoweditor-core';
 import {useLatestState} from '@neos-project/framework-observable-react';
 import {translate} from '@neos-project/neos-ui-i18n';
 import style from './style.module.css';

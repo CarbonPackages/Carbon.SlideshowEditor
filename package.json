@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "lint": "tsc --noemit",
-    "build": "yarn workspace @carbon/slideshoweditor-plugin run build"
+    "build": "yarn workspace @carbon/slideshoweditor-plugin run build",
+    "test": "yarn workspace @carbon/slideshoweditor-core test"
   },
   "workspaces": [
     "Modules/*"

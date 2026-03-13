@@ -195,11 +195,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@carbon/slideshoweditor-editor@workspace:*, @carbon/slideshoweditor-editor@workspace:Modules/editor":
+  version: 0.0.0-use.local
+  resolution: "@carbon/slideshoweditor-editor@workspace:Modules/editor"
+  dependencies:
+    "@carbon/slideshoweditor-core": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "@carbon/slideshoweditor-plugin@workspace:Modules/plugin":
   version: 0.0.0-use.local
   resolution: "@carbon/slideshoweditor-plugin@workspace:Modules/plugin"
   dependencies:
     "@carbon/slideshoweditor-core": "workspace:*"
+    "@carbon/slideshoweditor-editor": "workspace:*"
     "@neos-project/neos-ui-extensibility": ~9.1.4
   languageName: unknown
   linkType: soft

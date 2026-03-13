@@ -1,8 +1,12 @@
 {
     "name": "@carbon/slideshoweditor-core",
+    "type": "module",
     "license": "GPL-3.0",
     "main": "./src/index.ts",
     "version": "",
+    "scripts": {
+        "test": "node --test --experimental-transform-types"
+    },
     "dependencies": {
         "typesafe-actions": "~5.1.0"
     }

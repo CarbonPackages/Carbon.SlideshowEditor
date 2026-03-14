@@ -27,8 +27,6 @@ const SlideshowEditorDialog: React.FC<{
 
     const slideshowBuilder$ = React.useMemo(() => createState(SlideshowBuilder.createFromValue(initialValue)), [initialValue]);
 
-    const slideshowBuilder: SlideshowBuilder = useLatestState(slideshowBuilder$);
-
     const handleSubmit = React.useCallback(() => {
         const slideshow = slideshowBuilder$.current.build();
         if (slideshow.length) {
@@ -36,28 +34,21 @@ const SlideshowEditorDialog: React.FC<{
         } else {
             unset()
         }
-    }, []);
-
-    const [openedSlideId, setOpenedSlideId] = React.useState(null);
-    const back = React.useCallback(() => setOpenedSlideId(null), [setOpenedSlideId]);
-
-    const nextSlideId = React.useMemo(() => {
-        if (openedSlideId) {
-            return slideshowBuilder.nextSlideId(openedSlideId);
-        }
-        return null;
-    }, [slideshowBuilder, openedSlideId]);
-
-    const previousSlideId = React.useMemo(() => {
-        if (openedSlideId) {
-            return slideshowBuilder.previousSlideId(openedSlideId);
-        }
-        return null;
-    }, [slideshowBuilder, openedSlideId]);
+    }, [slideshowBuilder$]);
 
     const updateSlide = React.useCallback((slideBuilder: SlideBuilder) => {
-        slideshowBuilder$.update((slideshowBuilder: SlideshowBuilder) => slideshowBuilder.withUpdatedSlide(slideBuilder));
+        slideshowBuilder$.update(
+            (slideshowBuilder: SlideshowBuilder) => slideshowBuilder.withUpdatedSlide(slideBuilder)
+        );
     }, [slideshowBuilder$]);
+
+    const slideshowBuilder: SlideshowBuilder = useLatestState(slideshowBuilder$);
+
+    const [openedSlideId, setOpenedSlideId] = React.useState(null);
+    const backToOverview = React.useCallback(() => setOpenedSlideId(null), [setOpenedSlideId]);
+
+    const nextSlideId = React.useMemo(() => openedSlideId ? slideshowBuilder.nextSlideId(openedSlideId) : null, [slideshowBuilder, openedSlideId]);
+    const previousSlideId = React.useMemo(() => openedSlideId ? slideshowBuilder.previousSlideId(openedSlideId) : null, [slideshowBuilder, openedSlideId]);
 
     const isAuthenticated = useSelector(state => !state.system?.authenticationTimeout);
 
@@ -72,8 +63,8 @@ const SlideshowEditorDialog: React.FC<{
             <Dialog
                 id="carbon-SlideshowEditor-Slide"
                 isOpen={true}
-                preventClosing={false}
-                onRequestClose={dismiss}
+                preventClosing={slideBuilder.isDirty}
+                onRequestClose={backToOverview}
                 title={translate('Todo:todo:todo', 'Edit slide')}
                 style="auto"
                 autoFocus={true}
@@ -84,7 +75,7 @@ const SlideshowEditorDialog: React.FC<{
                     <Button onClick={() => setOpenedSlideId(nextSlideId)} disabled={!nextSlideId}>
                         {translate('Todo:todo:todo', 'Next')}
                     </Button>,
-                    <Button onClick={back}>
+                    <Button onClick={backToOverview}>
                         {translate('Todo:todo:todo', 'Back')}
                     </Button>
                 ]}
@@ -98,9 +89,9 @@ const SlideshowEditorDialog: React.FC<{
         <Dialog
             id="carbon-SlideshowEditor"
             isOpen={true}
-            preventClosing={false}
+            preventClosing={slideshowBuilder.isDirty}
             onRequestClose={dismiss}
-            title={translate('Todo:todo:todo', 'Edit slideshow')}
+            title={initialValue ? translate('Todo:todo:todo', 'Edit slideshow') : translate('Todo:todo:todo', 'Create slideshow')}
             style="auto"
             autoFocus={true}
             actions={[
@@ -112,8 +103,9 @@ const SlideshowEditorDialog: React.FC<{
                     style="success"
                     type="submit"
                     onClick={handleSubmit}
+                    disabled={!slideshowBuilder.isDirty}
                 >
-                    {translate('Todo:todo:todo', 'Create')}
+                    {initialValue ? translate('Todo:todo:todo', 'Update') : translate('Todo:todo:todo', 'Create')}
                 </Button>
             ]}
         >

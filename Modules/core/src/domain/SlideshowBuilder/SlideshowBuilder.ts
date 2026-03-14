@@ -47,7 +47,7 @@ export class SlideshowBuilder
 
     public get isDirty(): boolean
     {
-        return this.data.isDirty || Object.values(this.data.slideBuilderMap).some((slideBuilder: SlideBuilder) => slideBuilder.isDirty);
+        return this.data.isDirty;
     }
 
     public get slides(): SlideBuilder[]

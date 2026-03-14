@@ -1,11 +1,12 @@
 import {describe, it} from "node:test";
-import {equal, deepEqual} from "node:assert/strict";
+import {deepEqual, equal} from "node:assert/strict";
 import {SlideshowBuilder} from './SlideshowBuilder.ts';
 import type {ISlideshow} from "../Slideshow";
+import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 describe('SlideBuilder', () => {
-    it('create new slide', () => {
-        const slideshowBuilder = SlideshowBuilder.createFromValue(
+    it('update slide item', () => {
+        let slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
@@ -20,19 +21,35 @@ describe('SlideBuilder', () => {
                     }
                 ]
             ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's0i0': 'firstImage',
+                's1': 'slide1',
+                's1i0': 'secondImage',
+            })
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withNewSlide();
+        deepEqual(slideshowBuilder.getById('slide0').getById('firstImage').flowImageObject, {
+            __identity: 'first'
+        });
 
-        equal(newSlideshowBuilder.isDirty, true)
+        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withUpdatedItem(
+                slideshowBuilder.getById('slide0').getById('firstImage').withFlowImageObject({
+                    __identity: 'updatedImage'
+                })
+            )
+        );
+
+        equal(slideshowBuilder.isDirty, true)
 
         deepEqual(
-            newSlideshowBuilder.build(),
+            slideshowBuilder.build(),
             [
                 [
                     {
                         __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
-                        imageId: "first"
+                        imageId: "updatedImage"
                     }
                 ],
                 [
@@ -40,9 +57,6 @@ describe('SlideBuilder', () => {
                         __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
                         imageId: "second"
                     }
-                ],
-                [
-
                 ]
             ] as ISlideshow,
         );

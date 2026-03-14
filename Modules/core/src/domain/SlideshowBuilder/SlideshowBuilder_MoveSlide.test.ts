@@ -2,6 +2,7 @@ import {describe, it} from "node:test";
 import {equal, deepEqual} from "node:assert/strict";
 import {SlideshowBuilder} from './SlideshowBuilder.ts';
 import type {ISlideshow} from "../Slideshow";
+import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 describe('SlideBuilder Move', () => {
     it('move slide from middle to start', () => {
@@ -26,12 +27,14 @@ describe('SlideBuilder Move', () => {
                     }
                 ]
             ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's1': 'slide1',
+                's2': 'slide2',
+            })
         );
 
-        const firstSlideId = slideshowBuilder.getSlideIdForIndex(0);
-        const secondSlideId = slideshowBuilder.getSlideIdForIndex(1);
-
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide(secondSlideId, firstSlideId);
+        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide1', 'slide0');
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -82,12 +85,14 @@ describe('SlideBuilder Move', () => {
                     }
                 ]
             ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's1': 'slide1',
+                's2': 'slide2',
+            })
         );
 
-        const firstSlideId = slideshowBuilder.getSlideIdForIndex(0);
-        const thirdSlideId = slideshowBuilder.getSlideIdForIndex(2);
-
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide(firstSlideId, thirdSlideId);
+        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide0', 'slide2');
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -138,12 +143,14 @@ describe('SlideBuilder Move', () => {
                     }
                 ]
             ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's1': 'slide1',
+                's2': 'slide2',
+            })
         );
 
-        const secondSlideId = slideshowBuilder.getSlideIdForIndex(1);
-        const thirdSlideId = slideshowBuilder.getSlideIdForIndex(2);
-
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide(thirdSlideId, secondSlideId);
+        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide2', 'slide1');
 
         equal(newSlideshowBuilder.isDirty, true)
 

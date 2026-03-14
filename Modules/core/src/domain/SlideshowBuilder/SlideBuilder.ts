@@ -1,6 +1,7 @@
 import type {ISlide} from "../Slideshow/Slideshow";
 import {ImageSlideItemBuilder} from "./ImageSlideItemBuilder.ts";
 import {VideoSlideItemBuilder} from "./VideoSlideItemBuilder.ts";
+import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 type SlideItemBuilder = ImageSlideItemBuilder;
 
@@ -28,20 +29,21 @@ export class SlideBuilder
         this.itemBuilders = itemBuilders;
     }
 
-    public static createFromValue(value: ISlide | null): SlideBuilder
+    public static createFromValue(value: ISlide, deterministicIds: SlidePathToIdMapping | null): SlideBuilder
     {
         const orderedItemIds = [];
         const itemBuilderMap = {};
 
-        for (const slideItem of value ?? []) {
+        let index = 0;
+        for (const slideItem of value) {
             let slideItemBuilder = null;
 
             switch (slideItem.__type__) {
                 case "Carbon\\SlideshowEditor\\ImageSlideItem":
-                    slideItemBuilder = ImageSlideItemBuilder.createFromValue(slideItem);
+                    slideItemBuilder = ImageSlideItemBuilder.createFromValue(slideItem, deterministicIds?.getForSlideItemIndex(index));
                     break;
                 case "Carbon\\SlideshowEditor\\VideoSlideItem":
-                    slideItemBuilder = VideoSlideItemBuilder.createFromValue(slideItem);
+                    slideItemBuilder = VideoSlideItemBuilder.createFromValue(slideItem, deterministicIds?.getForSlideItemIndex(index));
                     break;
                 default:
                     throw new Error(`Unhandled slide item "${JSON.stringify(slideItem)}"`);
@@ -49,12 +51,23 @@ export class SlideBuilder
 
             orderedItemIds.push(slideItemBuilder.id);
             itemBuilderMap[slideItemBuilder.id] = slideItemBuilder;
+            ++index;
         }
 
         return new SlideBuilder({
-            id: crypto.randomUUID(),
+            id: deterministicIds?.getForSlide() ?? crypto.randomUUID(),
             orderedItemIds,
             itemBuilderMap,
+            isDirty: false,
+        });
+    }
+
+    public static createEmpty(id: string | null): SlideBuilder
+    {
+        return new SlideBuilder({
+            id: id ?? crypto.randomUUID(),
+            orderedItemIds: [],
+            itemBuilderMap: {},
             isDirty: false,
         });
     }
@@ -74,6 +87,12 @@ export class SlideBuilder
         return this.itemBuilders;
     }
 
+    public getById(id: string): SlideItemBuilder
+    {
+        this.assertItemExists(id);
+        return this.data.itemBuilderMap[id];
+    }
+
     public withUpdatedItem(slideItemBuilder: SlideItemBuilder): SlideBuilder
     {
         this.assertItemExists(slideItemBuilder.id);
@@ -89,7 +108,7 @@ export class SlideBuilder
         });
     }
 
-    public withNewItem(slideItemBuilder: SlideItemBuilder): SlideBuilder
+    public withCreatedItem(slideItemBuilder: SlideItemBuilder): SlideBuilder
     {
         if (this.data.orderedItemIds.includes(slideItemBuilder.id)) {
             throw new Error(`Item does exist on slide but was not supposed to: "${slideItemBuilder.id}"`);

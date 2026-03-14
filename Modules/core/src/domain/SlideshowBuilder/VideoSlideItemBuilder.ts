@@ -11,19 +11,19 @@ export class VideoSlideItemBuilder
     ) {
     }
 
-    public static createFromValue(value: IVideoSlideItem): VideoSlideItemBuilder
+    public static createFromValue(value: IVideoSlideItem, id: string | null): VideoSlideItemBuilder
     {
         return new VideoSlideItemBuilder({
-            id: crypto.randomUUID(),
+            id: id ?? crypto.randomUUID(),
             video: value.video,
             isDirty: false,
         });
     }
 
-    public static createEmpty(): VideoSlideItemBuilder
+    public static createEmpty(id: string | null = null): VideoSlideItemBuilder
     {
         return new VideoSlideItemBuilder({
-            id: crypto.randomUUID(),
+            id: id ?? crypto.randomUUID(),
             video: null,
             isDirty: false,
         });

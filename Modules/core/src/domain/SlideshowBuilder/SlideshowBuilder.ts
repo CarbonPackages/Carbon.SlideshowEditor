@@ -1,5 +1,6 @@
 import type {ISlideshow} from "../Slideshow";
 import {SlideBuilder} from "./SlideBuilder.ts";
+import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 export class SlideshowBuilder
 {
@@ -24,15 +25,17 @@ export class SlideshowBuilder
         this.slideBuilders = slideBuilders;
     }
 
-    public static createFromValue(value: ISlideshow | null): SlideshowBuilder
+    public static createFromValue(value: ISlideshow | null, deterministicIds: SlidePathToIdMapping | null): SlideshowBuilder
     {
         const orderedSlideIds = [];
         const slideBuilderMap = {};
 
+        let index = 0;
         for (const slide of value ?? []) {
-            const slideBuilder = SlideBuilder.createFromValue(slide);
+            const slideBuilder = SlideBuilder.createFromValue(slide, deterministicIds?.withSlideIndex(index));
             orderedSlideIds.push(slideBuilder.id);
             slideBuilderMap[slideBuilder.id] = slideBuilder;
+            ++index;
         }
 
         return new SlideshowBuilder({
@@ -52,9 +55,10 @@ export class SlideshowBuilder
         return this.slideBuilders;
     }
 
-    public getSlideIdForIndex(index: number): string | null
+    public getById(id: string): SlideBuilder
     {
-        return this.data.orderedSlideIds[index] ?? null;
+        this.assertSlideExists(id);
+        return this.data.slideBuilderMap[id];
     }
 
     public withMovedSlide(slideId: string, newSucceedingSlideId: string): SlideshowBuilder
@@ -81,9 +85,9 @@ export class SlideshowBuilder
         })
     }
 
-    public withNewSlide(): SlideshowBuilder
+    public withCreatedSlide(id: string | null = null): SlideshowBuilder
     {
-        const slideBuilder = SlideBuilder.createFromValue(null);
+        const slideBuilder = SlideBuilder.createEmpty(id);
 
         const {orderedSlideIds, slideBuilderMap} = this.data;
 

@@ -16,19 +16,19 @@ export class ImageSlideItemBuilder
         } : null;
     }
 
-    public static createFromValue(value: IImageSlideItem): ImageSlideItemBuilder
+    public static createFromValue(value: IImageSlideItem, id: string | null = null): ImageSlideItemBuilder
     {
         return new ImageSlideItemBuilder({
-            id: crypto.randomUUID(),
+            id: id ?? crypto.randomUUID(),
             imageId: value.imageId,
             isDirty: false,
         });
     }
 
-    public static createEmpty(): ImageSlideItemBuilder
+    public static createEmpty(id: string | null = null): ImageSlideItemBuilder
     {
         return new ImageSlideItemBuilder({
-            id: crypto.randomUUID(),
+            id: id ?? crypto.randomUUID(),
             imageId: null,
             isDirty: false,
         });

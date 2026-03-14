@@ -101,12 +101,12 @@ const SlideshowEditorDialog: React.FC<{
                         </div>;
                     })}
 
-                    <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withNewItem(ImageSlideItemBuilder.createEmpty())))}>Add image</Button>
-                    <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withNewItem(VideoSlideItemBuilder.createEmpty())))}>Add Video</Button>
+                    <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withCreatedItem(ImageSlideItemBuilder.createEmpty())))}>Add image</Button>
+                    <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withCreatedItem(VideoSlideItemBuilder.createEmpty())))}>Add Video</Button>
                 </div>
             })}
 
-            <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withNewSlide())}>Add Slide</Button>
+            <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}>Add Slide</Button>
         </Dialog>
     )
 }

@@ -3,7 +3,8 @@
     "type": "neos-package",
     "name": "carbon/slideshoweditor",
     "require": {
-        "neos/flow": "*"
+        "neos/neos-ui": "~9.1.4",
+        "carbon/videoplatformeditor": "~1.0"
     },
     "autoload": {
         "psr-4": {

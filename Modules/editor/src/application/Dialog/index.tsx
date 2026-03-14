@@ -1,6 +1,12 @@
 import * as React from 'react';
 import {Button, Dialog} from '@neos-project/react-ui-components';
-import {IEditor, ISlideshow, SlideshowBuilder, ImageSlideItemBuilder} from '@carbon/slideshoweditor-core';
+import {
+    IEditor,
+    ISlideshow,
+    SlideshowBuilder,
+    ImageSlideItemBuilder,
+    VideoSlideItemBuilder
+} from '@carbon/slideshoweditor-core';
 import {useLatestState} from '@neos-project/framework-observable-react';
 import {useSelector} from '@neos-project/neos-ui-redux-store';
 import {translate} from '@neos-project/neos-ui-i18n';
@@ -43,6 +49,7 @@ const SlideshowEditorDialog: React.FC<{
     }
 
     const ImageEditor = editorRegistry.get('Neos.Neos/Inspector/Editors/ImageEditor').component;
+    const VideoEditor = editorRegistry.get('Carbon.VideoPlatformEditor/Inspector/Editors/VideoPlatformEditor').component;
 
     return (
         <Dialog
@@ -83,10 +90,19 @@ const SlideshowEditorDialog: React.FC<{
                                     renderSecondaryInspector={editor.transactions.renderNestedEditor}
                                 />
                             ) : ''}
+
+                            {slideItemBuilder instanceof VideoSlideItemBuilder ? (
+                                <VideoEditor
+                                    value={slideItemBuilder.video}
+                                    commit={(video) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withUpdatedItem(slideItemBuilder.withVideo(video))))}
+                                    renderSecondaryInspector={editor.transactions.renderNestedEditor}
+                                />
+                            ) : ''}
                         </div>;
                     })}
 
                     <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withNewItem(ImageSlideItemBuilder.createEmpty())))}>Add image</Button>
+                    <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withUpdatedSlide(slideBuilder.withNewItem(VideoSlideItemBuilder.createEmpty())))}>Add Video</Button>
                 </div>
             })}
 

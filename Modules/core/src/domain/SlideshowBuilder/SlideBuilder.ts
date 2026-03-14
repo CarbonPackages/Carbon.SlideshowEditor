@@ -1,5 +1,6 @@
 import type {ISlide} from "../Slideshow/Slideshow";
 import {ImageSlideItemBuilder} from "./ImageSlideItemBuilder.ts";
+import {VideoSlideItemBuilder} from "./VideoSlideItemBuilder.ts";
 
 type SlideItemBuilder = ImageSlideItemBuilder;
 
@@ -39,8 +40,11 @@ export class SlideBuilder
                 case "Carbon\\SlideshowEditor\\ImageSlideItem":
                     slideItemBuilder = ImageSlideItemBuilder.createFromValue(slideItem);
                     break;
+                case "Carbon\\SlideshowEditor\\VideoSlideItem":
+                    slideItemBuilder = VideoSlideItemBuilder.createFromValue(slideItem);
+                    break;
                 default:
-                    throw new Error(`Unhandled slide item "${slideItem.__type__}"`);
+                    throw new Error(`Unhandled slide item "${JSON.stringify(slideItem)}"`);
             }
 
             orderedItemIds.push(slideItemBuilder.id);

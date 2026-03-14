@@ -37,12 +37,6 @@ const SlideshowEditorDialog: React.FC<{
         }
     }, [slideshowBuilder$]);
 
-    const updateSlide = React.useCallback((slideBuilder: SlideBuilder) => {
-        slideshowBuilder$.update(
-            (slideshowBuilder: SlideshowBuilder) => slideshowBuilder.withUpdatedSlide(slideBuilder)
-        );
-    }, [slideshowBuilder$]);
-
     const slideshowBuilder: SlideshowBuilder = useLatestState(slideshowBuilder$);
 
     const [openedSlideId, setOpenedSlideId] = React.useState(null);
@@ -72,10 +66,21 @@ const SlideshowEditorDialog: React.FC<{
                 actions={[
                     <Button onClick={backToOverview}>
                         {translate('Todo:todo:todo', 'Back')}
+                    </Button>,
+                    <Button
+                        id="carbon-SlideshowEditor-submit"
+                        style="success"
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={!slideshowBuilder.isDirty}
+                    >
+                        {initialValue ? translate('Todo:todo:todo', 'Update') : translate('Todo:todo:todo', 'Create')}
                     </Button>
                 ]}
             >
-                <SlideEditor editor={editor} slideBuilder={slideBuilder} slideshowBuilder$={slideshowBuilder$} editorComponents={editorComponents} />
+                <div className={style.dialogBody}>
+                    <SlideEditor editor={editor} slideBuilder={slideBuilder} slideshowBuilder$={slideshowBuilder$} editorComponents={editorComponents} />
+                </div>
                 <div className={style.navigationCorner}>
                     <Button onClick={() => setOpenedSlideId(previousSlideId)} disabled={!previousSlideId}>
                         {translate('Todo:todo:todo', 'Previous')}
@@ -112,13 +117,15 @@ const SlideshowEditorDialog: React.FC<{
                 </Button>
             ]}
         >
-            {slideshowBuilder.slides.map((slideBuilder, index) => {
-                return <div key={slideBuilder.id}>
-                    <Button onClick={() => setOpenedSlideId(slideBuilder.id)}>Open Slide {index + 1}</Button>
-                </div>
-            })}
+            <div className={style.dialogBody}>
+                {slideshowBuilder.slides.map((slideBuilder, index) => {
+                    return <div key={slideBuilder.id}>
+                        <Button onClick={() => setOpenedSlideId(slideBuilder.id)}>Open Slide {index + 1}</Button>
+                    </div>
+                })}
 
-            <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}>Add Slide</Button>
+                <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}>Add Slide</Button>
+            </div>
         </Dialog>
     )
 }

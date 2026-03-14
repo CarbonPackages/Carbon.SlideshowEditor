@@ -37,8 +37,6 @@ export const SlideEditor: React.FC<{
     }, [slideshowBuilder$, slideBuilder.id]);
 
     return <div>
-        Slide {slideBuilder.id}
-
         {slideBuilder.items.map((slideItemBuilder) => {
             // ToDo use React.useCallback
             const updatedItem = (updateFn: (slideItemBuilder: SlideItemBuilder) => SlideItemBuilder) => {
@@ -54,7 +52,7 @@ export const SlideEditor: React.FC<{
             };
 
             return <div key={slideItemBuilder.id}>
-                {/*<AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />*/}
+                <AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
 
                 {slideItemBuilder instanceof TextSlideItemBuilder ? (
                     <CKEditorRichTextEditor

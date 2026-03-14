@@ -3,3 +3,7 @@
     left: 0;
     bottom: 0;
 }
+
+.dialogBody {
+    padding-inline: 16px;
+}

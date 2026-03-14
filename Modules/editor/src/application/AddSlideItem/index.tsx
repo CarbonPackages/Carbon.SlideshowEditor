@@ -8,24 +8,31 @@ import {
 import {IconButton, Icon, Button} from '@neos-project/react-ui-components';
 import style from './style.module.css';
 
+let globalId = 0;
+
 export const AddSlideItem: React.FC<{
     createdSlideItem: (slideBuilder: SlideBuilder) => void;
 }> = ({createdSlideItem}) => {
-    return <div className={style.addRow}>
+    const id = React.useMemo(() => ++globalId, []);
+
+    const popoverId = `carbon-SlideItemAdd-popover-${id}`;
+    const anchorId = `carbon-SlideItemAdd-anchor-${id}`;
+
+    return <div className={style.addRow} style={{'--carbon-SlideItemAdd-anchor-name': anchorId}}>
         <div
-            id="carbon-SlideshowEditor-popover"
+            id={popoverId}
             popover="auto"
             className={style.addContents}
         >
             <div className={style.addContentsGrid}>
-                <Button popovertarget="carbon-SlideshowEditor-popover" onClick={() => createdSlideItem(TextSlideItemBuilder.createEmpty())}><Icon icon="paragraph" />&nbsp; Text</Button>
-                <Button popovertarget="carbon-SlideshowEditor-popover" onClick={() => createdSlideItem(ImageSlideItemBuilder.createEmpty())}><Icon icon="image" />&nbsp; Image</Button>
-                <Button popovertarget="carbon-SlideshowEditor-popover" onClick={() => createdSlideItem(VideoSlideItemBuilder.createEmpty())}><Icon icon="play" />&nbsp; Video</Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(TextSlideItemBuilder.createEmpty())}><Icon icon="paragraph" />&nbsp; Text</Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(ImageSlideItemBuilder.createEmpty())}><Icon icon="image" />&nbsp; Image</Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(VideoSlideItemBuilder.createEmpty())}><Icon icon="play" />&nbsp; Video</Button>
             </div>
         </div>
         <IconButton
             icon="plus"
-            popovertarget="carbon-SlideshowEditor-popover"
+            popovertarget={popoverId}
             style="lighter"
             hoverStyle="brand"
             className={style.addButton}

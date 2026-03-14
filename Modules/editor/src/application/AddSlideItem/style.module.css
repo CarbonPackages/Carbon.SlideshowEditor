@@ -1,6 +1,38 @@
 .addRow {
     display: flex;
     justify-content: center;
+    position: relative;
+    --carbon-SlideItemAdd-color: var(--colors-ContrastDark);
+    margin-block: 20px;
+}
+
+.addRow:hover {
+    --carbon-SlideItemAdd-color: var(--colors-PrimaryBlue);
+}
+
+.addRow::before, .addRow::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: calc(50% - 30px);
+    height: 21px;
+    background-image: linear-gradient(to right, var(--carbon-SlideItemAdd-color) 33%, rgba(255, 255, 255, 0) 0%);
+    background-position: bottom;
+    background-size: 19px 2px;
+    background-repeat: repeat-x;
+}
+
+.addRow::before {
+    left: 0;
+}
+
+.addRow::after {
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.addRow:has(> .addContents:popover-open) {
+    --carbon-SlideItemAdd-color: var(--colors-PrimaryBlue);
 }
 
 .addContents {
@@ -17,14 +49,24 @@
 }
 
 .addContents {
-    position-anchor: --neos-LinkEditor-Advanced-anchor;
+    position-anchor: var(--carbon-SlideItemAdd-anchor-name);
     top: calc(anchor(bottom) + 10px);
 }
 
 .addButton {
-    anchor-name: --neos-LinkEditor-Advanced-anchor;
+    anchor-name: var(--carbon-SlideItemAdd-anchor-name);
+    opacity: .5;
 }
 
 .addButton:focus {
     outline: none;
+}
+
+.addContents:popover-open + .addButton {
+    background: var(--colors-PrimaryBlue);
+    opacity: 1;
+}
+
+.addRow:hover .addButton {
+    opacity: 1;
 }

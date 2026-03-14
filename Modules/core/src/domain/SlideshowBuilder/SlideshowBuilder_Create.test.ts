@@ -26,7 +26,7 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "myId"
                     }
                 ]
@@ -40,7 +40,7 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "myId"
                     }
                 ]
@@ -53,15 +53,21 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "myId"
                     },
                     {
-                        __type__: "Carbon\\SlideshowEditor\\VideoSlideItem",
+                        type: "video",
                         video: {
-                            videoId: "abc"
+                            videoId: "#1267845"
                         }
                     }
+                ],
+                [
+                    {
+                        type: "text",
+                        text: "<span>my text</span>"
+                    },
                 ]
             ]
         );
@@ -73,15 +79,21 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "myId"
                     },
                     {
-                        __type__: "Carbon\\SlideshowEditor\\VideoSlideItem",
+                        type: "video",
                         video: {
-                            videoId: "abc"
+                            videoId: "#1267845"
                         }
                     }
+                ],
+                [
+                    {
+                        type: "text",
+                        text: "<span>my text</span>"
+                    },
                 ]
             ] as ISlideshow,
         );

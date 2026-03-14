@@ -23,10 +23,12 @@ final readonly class Slide implements \JsonSerializable
     {
         return new self(
             ...array_map(
-                /**
-                 * @param array{__type__:class-string<SlideItemInterface>} $item
-                 */
-                fn (array $item): SlideItemInterface => ($item['__type__'])::fromArray($item),
+                fn (array $item): SlideItemInterface => match ($item['type']) {
+                   'text' => TextSlideItem::fromArray($item),
+                   'image' => ImageSlideItem::fromArray($item),
+                   'video' => VideoSlideItem::fromArray($item),
+                    default => throw new \RuntimeException(sprintf('Invalid slide item "%s".', json_encode($item)), 1773479921)
+                },
                 $array
             )
         );
@@ -44,7 +46,15 @@ final readonly class Slide implements \JsonSerializable
     public function jsonSerialize(): mixed
     {
         return array_map(
-            fn (SlideItemInterface $item) => ['__type__' => $item::class, ...$item->jsonSerialize()],
+            fn (SlideItemInterface $item) => [
+                'type' => match ($item::class) {
+                    TextSlideItem::class => 'text',
+                    ImageSlideItem::class => 'image',
+                    VideoSlideItem::class => 'video',
+                    default => throw new \RuntimeException(sprintf('Invalid slide item "%s".', $item::class), 1773479941)
+                },
+                ...$item->jsonSerialize()
+            ],
             $this->items
         );
     }

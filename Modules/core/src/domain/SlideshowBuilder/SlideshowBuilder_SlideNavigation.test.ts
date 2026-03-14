@@ -9,19 +9,19 @@ describe('SlideBuilder Navigation', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ]

@@ -5,14 +5,14 @@ import {useLatestState} from '@neos-project/framework-observable-react';
 import {useSelector} from '@neos-project/neos-ui-redux-store';
 import {translate} from '@neos-project/neos-ui-i18n';
 import {createState} from '@neos-project/framework-observable';
-import {SlideEditor} from "../SlideEditor";
+import {EditorComponents, SlideEditor} from "../SlideEditor";
 import {SlideBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
 
-export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorRegistry: any}) => () => {
+export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorComponents: EditorComponents}) => () => {
     const {isOpen, initialValue} = useLatestState(deps.editor.state$);
 
     if (isOpen) {
-        return <SlideshowEditorDialog editor={deps.editor} editorRegistry={deps.editorRegistry} initialValue={initialValue}/>;
+        return <SlideshowEditorDialog editor={deps.editor} editorComponents={deps.editorComponents} initialValue={initialValue}/>;
     }
 
     return null;
@@ -21,8 +21,8 @@ export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorRegist
 const SlideshowEditorDialog: React.FC<{
     editor: IEditor
     initialValue: ISlideshow | null
-    editorRegistry: any
-}> = ({editor, initialValue, editorRegistry}) => {
+    editorComponents: EditorComponents
+}> = ({editor, initialValue, editorComponents}) => {
     const {dismiss, unset, apply} = editor.transactions;
 
     const slideshowBuilder$ = React.useMemo(() => createState(SlideshowBuilder.createFromValue(initialValue)), [initialValue]);
@@ -89,7 +89,7 @@ const SlideshowEditorDialog: React.FC<{
                     </Button>
                 ]}
             >
-                <SlideEditor editor={editor} slideBuilder={slideBuilder} updateSlide={updateSlide} editorRegistry={editorRegistry} />
+                <SlideEditor editor={editor} slideBuilder={slideBuilder} updateSlide={updateSlide} editorComponents={editorComponents} />
             </Dialog>
         );
     }

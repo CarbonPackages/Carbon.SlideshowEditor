@@ -10,10 +10,22 @@ manifest('@carbon/slideshoweditor-plugin', {}, (globalRegistry) => {
 	const containersRegistry = globalRegistry.get('containers');
 	const inspectorRegistry = globalRegistry.get('inspector');
 	const editorRegistry = inspectorRegistry.get('editors');
+	const secondaryEditorRegistry = inspectorRegistry.get('secondaryEditors');
+
+	const ImageEditor = editorRegistry.get('Neos.Neos/Inspector/Editors/ImageEditor').component;
+	const VideoEditor = editorRegistry.get('Carbon.VideoPlatformEditor/Inspector/Editors/VideoPlatformEditor').component;
+	const CKEditorRichTextEditor = secondaryEditorRegistry.get('Neos.Neos/Inspector/Secondary/Editors/CKEditorWrap').component;
 
 	containersRegistry.set(
 		'Modals/CarbonSlideshowEditor',
-		createSlideshowEditorDialog({editor, editorRegistry})
+		createSlideshowEditorDialog({
+			editor,
+			editorComponents: {
+				ImageEditor,
+				VideoEditor,
+				CKEditorRichTextEditor,
+			}
+		})
 	);
 
 	containersRegistry.set(

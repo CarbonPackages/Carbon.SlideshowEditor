@@ -10,19 +10,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ]
@@ -43,19 +43,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ]
@@ -68,19 +68,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ]
@@ -101,19 +101,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
@@ -126,19 +126,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ]
@@ -159,19 +159,19 @@ describe('SlideBuilder Move', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "third"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ],

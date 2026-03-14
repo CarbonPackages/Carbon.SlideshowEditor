@@ -7,6 +7,7 @@ namespace Carbon\SlideshowEditor\Tests\Unit;
 use Carbon\SlideshowEditor\ImageSlideItem;
 use Carbon\SlideshowEditor\Slide;
 use Carbon\SlideshowEditor\Slideshow;
+use Carbon\SlideshowEditor\TextSlideItem;
 use PHPUnit\Framework\TestCase;
 
 class SlideshowTest extends TestCase
@@ -20,6 +21,7 @@ class SlideshowTest extends TestCase
                 new ImageSlideItem(imageId: 'second'),
             ),
             new Slide(
+                new TextSlideItem(text: '<span>first text</span>'),
                 new ImageSlideItem(imageId: 'third'),
             )
         );
@@ -28,17 +30,21 @@ class SlideshowTest extends TestCase
         [
             [
                 {
-                    "__type__": "Carbon\\SlideshowEditor\\ImageSlideItem",
+                    "type": "image",
                     "imageId": "first"
                 },
                 {
-                    "__type__": "Carbon\\SlideshowEditor\\ImageSlideItem",
+                    "type": "image",
                     "imageId": "second"
                 }
             ],
             [
                 {
-                    "__type__": "Carbon\\SlideshowEditor\\ImageSlideItem",
+                    "type": "text",
+                    "text": "<span>first text</span>"
+                },
+                {
+                    "type": "image",
                     "imageId": "third"
                 }
             ]

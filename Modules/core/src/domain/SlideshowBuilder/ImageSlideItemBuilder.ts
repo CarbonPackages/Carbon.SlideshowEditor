@@ -34,7 +34,6 @@ export class ImageSlideItemBuilder
         });
     }
 
-
     public get id(): string
     {
         return this.data.id;
@@ -58,7 +57,7 @@ export class ImageSlideItemBuilder
     public build(): IImageSlideItem | null
     {
         return this.data.imageId ? {
-            __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+            type: "image",
             imageId: this.data.imageId
         } : null;
     }

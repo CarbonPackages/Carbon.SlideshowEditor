@@ -4,6 +4,7 @@ Neos:
       resources:
         javascript:
           '@carbon/slideshoweditor':
+            position: 'after @carbon/videoplatformeditor'
             resource: 'resource://Carbon.SlideshowEditor/Public/JavaScript/Plugin.js'
         stylesheets:
           '@carbon/slideshoweditor':

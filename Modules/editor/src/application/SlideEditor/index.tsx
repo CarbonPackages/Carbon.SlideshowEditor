@@ -1,22 +1,41 @@
 import * as React from "react";
 import {SlideBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
-import {IEditor, ImageSlideItemBuilder, VideoSlideItemBuilder} from "@carbon/slideshoweditor-core";
+import {IEditor, ImageSlideItemBuilder, TextSlideItemBuilder, VideoSlideItemBuilder} from "@carbon/slideshoweditor-core";
 import {Button} from '@neos-project/react-ui-components';
+
+export type EditorComponents = {
+    ImageEditor: React.ComponentType,
+    VideoEditor: React.ComponentType,
+    CKEditorRichTextEditor: React.ComponentType,
+};
 
 export const SlideEditor: React.FC<{
     editor: IEditor;
     slideBuilder: SlideBuilder;
     updateSlide: (slideBuilder: SlideBuilder) => void;
-    editorRegistry: any;
-}> = ({slideBuilder, editor, updateSlide, editorRegistry}) => {
-    const ImageEditor = editorRegistry.get('Neos.Neos/Inspector/Editors/ImageEditor').component;
-    const VideoEditor = editorRegistry.get('Carbon.VideoPlatformEditor/Inspector/Editors/VideoPlatformEditor').component;
-
+    editorComponents: EditorComponents;
+}> = ({slideBuilder, editor, updateSlide, editorComponents: {ImageEditor, VideoEditor, CKEditorRichTextEditor}}) => {
     return <div>
         Slide {slideBuilder.id}
 
         {slideBuilder.items.map((slideItemBuilder) => {
             return <div key={slideItemBuilder.id}>
+                {slideItemBuilder instanceof TextSlideItemBuilder ? (
+                    <CKEditorRichTextEditor
+                        options={{
+                            formatting: {
+                                img: true,
+                                a: true,
+                                strong: true,
+                                b: true,
+                            }
+                        }}
+                        value={slideItemBuilder.text}
+                        onChange={(text) => updateSlide(slideBuilder.withUpdatedItem(slideItemBuilder.withText(text)))}
+                        renderSecondaryInspector={editor.transactions.renderNestedEditor}
+                    />
+                ) : ''}
+
                 {slideItemBuilder instanceof ImageSlideItemBuilder ? (
                     <ImageEditor
                         options={{
@@ -40,6 +59,7 @@ export const SlideEditor: React.FC<{
             </div>;
         })}
 
+        <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(TextSlideItemBuilder.createEmpty()))}>Add text</Button>
         <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(ImageSlideItemBuilder.createEmpty()))}>Add image</Button>
         <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(VideoSlideItemBuilder.createEmpty()))}>Add Video</Button>
     </div>;

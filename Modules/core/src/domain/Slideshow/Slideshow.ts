@@ -2,14 +2,19 @@ export type ISlideshow = ISlide[];
 
 export type ISlide = ISlideItem[];
 
-export type ISlideItem = IImageSlideItem | IVideoSlideItem;
+export type ISlideItem = ITextSlideItem | IImageSlideItem | IVideoSlideItem;
+
+export interface ITextSlideItem {
+    'type': 'text'
+    'text': string
+}
 
 export interface IImageSlideItem {
-    '__type__': 'Carbon\\SlideshowEditor\\ImageSlideItem'
+    'type': 'image'
     'imageId': string
 }
 
 export interface IVideoSlideItem {
-    '__type__': 'Carbon\\SlideshowEditor\\VideoSlideItem'
+    'type': 'video'
     'video': unknown
 }

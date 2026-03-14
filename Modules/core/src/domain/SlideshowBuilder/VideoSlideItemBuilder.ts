@@ -29,7 +29,6 @@ export class VideoSlideItemBuilder
         });
     }
 
-
     public get id(): string
     {
         return this.data.id;
@@ -58,7 +57,7 @@ export class VideoSlideItemBuilder
     public build(): IVideoSlideItem | null
     {
         return this.data.video ? {
-            __type__: "Carbon\\SlideshowEditor\\VideoSlideItem",
+            type: "video",
             video: this.data.video
         } : null;
     }

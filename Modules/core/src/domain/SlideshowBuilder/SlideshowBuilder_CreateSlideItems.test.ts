@@ -11,13 +11,13 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ]
@@ -43,13 +43,13 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ]
@@ -72,17 +72,17 @@ describe('SlideBuilder', () => {
             [
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "first"
                     },
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "newImage"
                     }
                 ],
                 [
                     {
-                        __type__: "Carbon\\SlideshowEditor\\ImageSlideItem",
+                        type: "image",
                         imageId: "second"
                     }
                 ]

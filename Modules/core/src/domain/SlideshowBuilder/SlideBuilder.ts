@@ -2,6 +2,7 @@ import type {ISlide} from "../Slideshow/Slideshow";
 import {ImageSlideItemBuilder} from "./ImageSlideItemBuilder.ts";
 import {VideoSlideItemBuilder} from "./VideoSlideItemBuilder.ts";
 import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
+import {TextSlideItemBuilder} from "./TextSlideItemBuilder.ts";
 
 type SlideItemBuilder = ImageSlideItemBuilder;
 
@@ -38,11 +39,14 @@ export class SlideBuilder
         for (const slideItem of value) {
             let slideItemBuilder = null;
 
-            switch (slideItem.__type__) {
-                case "Carbon\\SlideshowEditor\\ImageSlideItem":
+            switch (slideItem.type) {
+                case "text":
+                    slideItemBuilder = TextSlideItemBuilder.createFromValue(slideItem, deterministicIds?.getForSlideItemIndex(index));
+                    break;
+                case "image":
                     slideItemBuilder = ImageSlideItemBuilder.createFromValue(slideItem, deterministicIds?.getForSlideItemIndex(index));
                     break;
-                case "Carbon\\SlideshowEditor\\VideoSlideItem":
+                case "video":
                     slideItemBuilder = VideoSlideItemBuilder.createFromValue(slideItem, deterministicIds?.getForSlideItemIndex(index));
                     break;
                 default:

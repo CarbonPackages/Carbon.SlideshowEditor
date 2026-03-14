@@ -1,13 +1,15 @@
 import {describe, it} from "node:test";
-import {equal, deepEqual} from "node:assert/strict";
+import {deepEqual, equal, throws} from "node:assert/strict";
 import {SlideshowBuilder} from './SlideshowBuilder.ts';
 import type {ISlideshow} from "../Slideshow";
 import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 import {ImageSlideItemBuilder} from "./ImageSlideItemBuilder.ts";
+import {TextSlideItemBuilder} from "./TextSlideItemBuilder.ts";
+import {SlideBuilder} from "./SlideBuilder.ts";
 
 describe('SlideBuilder', () => {
     it('create new slide item', () => {
-        let slideshowBuilder = SlideshowBuilder.createFromValue(
+        const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
@@ -29,17 +31,21 @@ describe('SlideBuilder', () => {
         );
 
 
-        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
+        let newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
             slideshowBuilder.getById('slide0').withCreatedItem(
                 ImageSlideItemBuilder.createEmpty('newImage0')
             )
         );
 
-        equal(slideshowBuilder.isDirty, true)
+        // immutability must be ensured. The original builder is NOT modified.
+        throws(() => slideshowBuilder.getById('slide0').getById('newImage0'));
+        equal(newSlideshowBuilder.getById('slide0').getById('newImage0') instanceof ImageSlideItemBuilder, true);
+
+        equal(newSlideshowBuilder.isDirty, true)
 
         // building does not show the image as its empty and omitted
         deepEqual(
-            slideshowBuilder.build(),
+            newSlideshowBuilder.build(),
             [
                 [
                     {
@@ -56,11 +62,11 @@ describe('SlideBuilder', () => {
             ] as ISlideshow,
         );
 
-        const imageBuilder = slideshowBuilder.getById('slide0').getById('newImage0');
+        const imageBuilder = newSlideshowBuilder.getById('slide0').getById('newImage0');
         equal(imageBuilder.flowImageObject, null);
 
-        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
-            slideshowBuilder.getById('slide0').withUpdatedItem(
+        newSlideshowBuilder = newSlideshowBuilder.withUpdatedSlide(
+            newSlideshowBuilder.getById('slide0').withUpdatedItem(
                 imageBuilder.withFlowImageObject({
                     __identity: 'newImage'
                 })
@@ -68,7 +74,7 @@ describe('SlideBuilder', () => {
         );
 
         deepEqual(
-            slideshowBuilder.build(),
+            newSlideshowBuilder.build(),
             [
                 [
                     {
@@ -84,6 +90,163 @@ describe('SlideBuilder', () => {
                     {
                         type: "image",
                         imageId: "second"
+                    }
+                ]
+            ] as ISlideshow,
+        );
+    });
+
+    it('create new slide item at the start', () => {
+        let slideshowBuilder = SlideshowBuilder.createFromValue(
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
+                    }
+                ]
+            ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's0i0': 'firstImage',
+                's0i1': 'firstText',
+            })
+        );
+
+        let newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withCreatedItem(
+                TextSlideItemBuilder.createEmpty('newText'),
+                'firstImage'
+            )
+        );
+        // immutability must be ensured. The original builder is NOT modified.
+        throws(() => slideshowBuilder.getById('slide0').getById('newText'));
+        equal(newSlideshowBuilder.getById('slide0').getById('newText') instanceof TextSlideItemBuilder, true);
+
+        equal(newSlideshowBuilder.isDirty, true)
+
+        // building does not show the image as its empty and omitted
+        deepEqual(
+            newSlideshowBuilder.build(),
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
+                    }
+                ]
+            ] as ISlideshow,
+        );
+
+        const textBuilder = newSlideshowBuilder.getById('slide0').getById('newText');
+        equal(textBuilder.text, '');
+
+        newSlideshowBuilder = newSlideshowBuilder.withUpdatedSlide(
+            newSlideshowBuilder.getById('slide0').withUpdatedItem(
+                textBuilder.withText('My new text')
+            )
+        );
+
+        deepEqual(
+            newSlideshowBuilder.build(),
+            [
+                [
+                    {
+                        type: "text",
+                        text: "My new text"
+                    },
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
+                    }
+                ]
+            ] as ISlideshow,
+        );
+    });
+
+    it('create new slide item in the middle', () => {
+        let slideshowBuilder = SlideshowBuilder.createFromValue(
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
+                    }
+                ]
+            ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's0i0': 'firstImage',
+                's0i1': 'firstText',
+            })
+        );
+
+        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withCreatedItem(
+                TextSlideItemBuilder.createEmpty('newText'),
+                'firstText'
+            )
+        );
+
+        equal(slideshowBuilder.isDirty, true)
+
+        // building does not show the image as its empty and omitted
+        deepEqual(
+            slideshowBuilder.build(),
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
+                    }
+                ]
+            ] as ISlideshow,
+        );
+
+        const textBuilder = slideshowBuilder.getById('slide0').getById('newText');
+        equal(textBuilder.text, '');
+
+        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withUpdatedItem(
+                textBuilder.withText('My new text')
+            )
+        );
+
+        deepEqual(
+            slideshowBuilder.build(),
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "my-image"
+                    },
+                    {
+                        type: "text",
+                        text: "My new text"
+                    },
+                    {
+                        type: "text",
+                        text: "My text"
                     }
                 ]
             ] as ISlideshow,

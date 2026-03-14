@@ -101,9 +101,7 @@ export class SlideBuilder
     {
         this.assertItemExists(slideItemBuilder.id);
 
-        const {itemBuilderMap} = this.data;
-
-        itemBuilderMap[slideItemBuilder.id] = slideItemBuilder;
+        const itemBuilderMap = {...this.data.itemBuilderMap, [slideItemBuilder.id]: slideItemBuilder};
 
         return new SlideBuilder({
             ...this.data,
@@ -112,16 +110,33 @@ export class SlideBuilder
         });
     }
 
-    public withCreatedItem(slideItemBuilder: SlideItemBuilder): SlideBuilder
+    public withCreatedItem(slideItemBuilder: SlideItemBuilder, succeedingSiblingItemId: string | null = null): SlideBuilder
     {
         if (this.data.orderedItemIds.includes(slideItemBuilder.id)) {
             throw new Error(`Item does exist on slide but was not supposed to: "${slideItemBuilder.id}"`);
         }
 
-        const {orderedItemIds, itemBuilderMap} = this.data;
+        if (succeedingSiblingItemId !== null) {
+            this.assertItemExists(succeedingSiblingItemId);
 
-        orderedItemIds.push(slideItemBuilder.id);
-        itemBuilderMap[slideItemBuilder.id] = slideItemBuilder;
+            const succeedingSlideIndex = this.data.orderedItemIds.indexOf(succeedingSiblingItemId);
+
+            const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideIndex);
+            const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideIndex);
+
+            const orderedItemIds = [...precedingPart, slideItemBuilder.id, ...succeedingPart];
+            const itemBuilderMap = {...this.data.itemBuilderMap, [slideItemBuilder.id]: slideItemBuilder};
+
+            return new SlideBuilder({
+                ...this.data,
+                isDirty: true,
+                orderedItemIds,
+                itemBuilderMap,
+            });
+        }
+
+        const orderedItemIds = [...this.data.orderedItemIds, slideItemBuilder.id];
+        const itemBuilderMap = {...this.data.itemBuilderMap, [slideItemBuilder.id]: slideItemBuilder};
 
         return new SlideBuilder({
             ...this.data,

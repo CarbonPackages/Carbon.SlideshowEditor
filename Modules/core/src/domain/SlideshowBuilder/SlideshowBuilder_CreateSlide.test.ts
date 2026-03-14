@@ -1,7 +1,8 @@
 import {describe, it} from "node:test";
-import {equal, deepEqual} from "node:assert/strict";
+import {equal, deepEqual, throws} from "node:assert/strict";
 import {SlideshowBuilder} from './SlideshowBuilder.ts';
 import type {ISlideshow} from "../Slideshow";
+import {SlideBuilder} from "./SlideBuilder.ts";
 
 describe('SlideBuilder', () => {
     it('create new slide', () => {
@@ -22,7 +23,11 @@ describe('SlideBuilder', () => {
             ],
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withCreatedSlide();
+        const newSlideshowBuilder = slideshowBuilder.withCreatedSlide('newSlide');
+
+        // immutability must be ensured. The original builder is NOT modified.
+        throws(() => slideshowBuilder.getById('newSlide'));
+        equal(newSlideshowBuilder.getById('newSlide') instanceof SlideBuilder, true);
 
         equal(newSlideshowBuilder.isDirty, true)
 

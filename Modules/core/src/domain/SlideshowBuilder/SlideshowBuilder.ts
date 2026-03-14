@@ -75,16 +75,16 @@ export class SlideshowBuilder
         return this.data.orderedSlideIds[index + 1] ?? null;
     }
 
-    public withMovedSlide(slideId: string, newSucceedingSlideId: string): SlideshowBuilder
+    public withMovedSlide(slideId: string, newSucceedingSiblingSlideId: string): SlideshowBuilder
     {
         this.assertSlideExists(slideId);
-        this.assertSlideExists(newSucceedingSlideId);
+        this.assertSlideExists(newSucceedingSiblingSlideId);
 
-        if (slideId === newSucceedingSlideId) {
+        if (slideId === newSucceedingSiblingSlideId) {
             return this;
         }
 
-        const succeedingSlideIndex = this.data.orderedSlideIds.indexOf(newSucceedingSlideId);
+        const succeedingSlideIndex = this.data.orderedSlideIds.indexOf(newSucceedingSiblingSlideId);
 
         const slideIdsWithoutMoved = this.data.orderedSlideIds.filter(id => id !== slideId);
         const precedingPart = slideIdsWithoutMoved.slice(0, succeedingSlideIndex);
@@ -103,10 +103,8 @@ export class SlideshowBuilder
     {
         const slideBuilder = SlideBuilder.createEmpty(id);
 
-        const {orderedSlideIds, slideBuilderMap} = this.data;
-
-        orderedSlideIds.push(slideBuilder.id);
-        slideBuilderMap[slideBuilder.id] = slideBuilder;
+        const orderedSlideIds = [...this.data.orderedSlideIds, slideBuilder.id];
+        const slideBuilderMap = {...this.data.slideBuilderMap, [slideBuilder.id]: slideBuilder};
 
         return new SlideshowBuilder({
             ...this.data,
@@ -120,9 +118,7 @@ export class SlideshowBuilder
     {
         this.assertSlideExists(slideBuilder.id);
 
-        const {slideBuilderMap} = this.data;
-
-        slideBuilderMap[slideBuilder.id] = slideBuilder;
+        const slideBuilderMap = {...this.data.slideBuilderMap, [slideBuilder.id]: slideBuilder};
 
         return new SlideshowBuilder({
             ...this.data,

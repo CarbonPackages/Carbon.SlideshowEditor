@@ -6,7 +6,7 @@ import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 describe('SlideBuilder', () => {
     it('update slide item', () => {
-        let slideshowBuilder = SlideshowBuilder.createFromValue(
+        const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
@@ -33,7 +33,7 @@ describe('SlideBuilder', () => {
             __identity: 'first'
         });
 
-        slideshowBuilder = slideshowBuilder.withUpdatedSlide(
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
             slideshowBuilder.getById('slide0').withUpdatedItem(
                 slideshowBuilder.getById('slide0').getById('firstImage').withFlowImageObject({
                     __identity: 'updatedImage'
@@ -41,10 +41,15 @@ describe('SlideBuilder', () => {
             )
         );
 
-        equal(slideshowBuilder.isDirty, true)
+        // immutability must be ensured. The original builder is NOT modified.
+        deepEqual(slideshowBuilder.getById('slide0').getById('firstImage').flowImageObject, {
+            __identity: 'first'
+        });
+
+        equal(newSlideshowBuilder.isDirty, true)
 
         deepEqual(
-            slideshowBuilder.build(),
+            newSlideshowBuilder.build(),
             [
                 [
                     {

@@ -1,7 +1,13 @@
 import * as React from "react";
-import {SlideBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
-import {IEditor, ImageSlideItemBuilder, TextSlideItemBuilder, VideoSlideItemBuilder} from "@carbon/slideshoweditor-core";
-import {Button} from '@neos-project/react-ui-components';
+import {SlideBuilder, SlideItemBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
+import {
+    IEditor,
+    ImageSlideItemBuilder,
+    SlideshowBuilder,
+    TextSlideItemBuilder,
+    VideoSlideItemBuilder
+} from "@carbon/slideshoweditor-core";
+import {AddSlideItem} from "../AddSlideItem";
 
 export type EditorComponents = {
     ImageEditor: React.ComponentType,
@@ -12,14 +18,44 @@ export type EditorComponents = {
 export const SlideEditor: React.FC<{
     editor: IEditor;
     slideBuilder: SlideBuilder;
+    slideshowBuilder$: {
+        update(slideshowBuilder: SlideshowBuilder): SlideshowBuilder
+    },
     updateSlide: (slideBuilder: SlideBuilder) => void;
     editorComponents: EditorComponents;
-}> = ({slideBuilder, editor, updateSlide, editorComponents: {ImageEditor, VideoEditor, CKEditorRichTextEditor}}) => {
+}> = ({slideBuilder, editor, slideshowBuilder$, editorComponents: {ImageEditor, VideoEditor, CKEditorRichTextEditor}}) => {
+
+    const createSlideItemFactoryFn = React.useCallback((succeedingSiblingItemId: string | null) => (slideItemBuilder: SlideItemBuilder) => {
+        slideshowBuilder$.update(
+            (slideshowBuilder) => slideshowBuilder.withUpdatedSlide(
+                slideshowBuilder.getById(slideBuilder.id).withCreatedItem(
+                    slideItemBuilder,
+                    succeedingSiblingItemId
+                )
+            )
+        )
+    }, [slideshowBuilder$, slideBuilder.id]);
+
     return <div>
         Slide {slideBuilder.id}
 
         {slideBuilder.items.map((slideItemBuilder) => {
+            // ToDo use React.useCallback
+            const updatedItem = (updateFn: (slideItemBuilder: SlideItemBuilder) => SlideItemBuilder) => {
+                slideshowBuilder$.update(
+                    (slideshowBuilder) => slideshowBuilder.withUpdatedSlide(
+                        slideshowBuilder.getById(slideBuilder.id).withUpdatedItem(
+                            updateFn(
+                                slideshowBuilder.getById(slideBuilder.id).getById(slideItemBuilder.id)
+                            )
+                        )
+                    )
+                )
+            };
+
             return <div key={slideItemBuilder.id}>
+                {/*<AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />*/}
+
                 {slideItemBuilder instanceof TextSlideItemBuilder ? (
                     <CKEditorRichTextEditor
                         options={{
@@ -31,7 +67,7 @@ export const SlideEditor: React.FC<{
                             }
                         }}
                         value={slideItemBuilder.text}
-                        onChange={(text) => updateSlide(slideBuilder.withUpdatedItem(slideItemBuilder.withText(text)))}
+                        onChange={(text) => updatedItem(slideItemBuilder => slideItemBuilder.withText(text))}
                         renderSecondaryInspector={editor.transactions.renderNestedEditor}
                     />
                 ) : ''}
@@ -44,7 +80,7 @@ export const SlideEditor: React.FC<{
                             }
                         }}
                         value={slideItemBuilder.flowImageObject}
-                        commit={(flowImageObject) => updateSlide(slideBuilder.withUpdatedItem(slideItemBuilder.withFlowImageObject(flowImageObject)))}
+                        commit={(flowImageObject) => updatedItem(slideItemBuilder => slideItemBuilder.withFlowImageObject(flowImageObject))}
                         renderSecondaryInspector={editor.transactions.renderNestedEditor}
                     />
                 ) : ''}
@@ -52,15 +88,13 @@ export const SlideEditor: React.FC<{
                 {slideItemBuilder instanceof VideoSlideItemBuilder ? (
                     <VideoEditor
                         value={slideItemBuilder.video}
-                        commit={(video) => updateSlide(slideBuilder.withUpdatedItem(slideItemBuilder.withVideo(video)))}
+                        commit={(video) => updatedItem(slideItemBuilder => slideItemBuilder.withVideo(video))}
                         renderSecondaryInspector={editor.transactions.renderNestedEditor}
                     />
                 ) : ''}
             </div>;
         })}
 
-        <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(TextSlideItemBuilder.createEmpty()))}>Add text</Button>
-        <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(ImageSlideItemBuilder.createEmpty()))}>Add image</Button>
-        <Button onClick={() => updateSlide(slideBuilder.withCreatedItem(VideoSlideItemBuilder.createEmpty()))}>Add Video</Button>
+        <AddSlideItem createdSlideItem={createSlideItemFactoryFn(null)} />
     </div>;
 }

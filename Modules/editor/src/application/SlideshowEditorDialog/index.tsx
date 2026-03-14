@@ -7,6 +7,7 @@ import {translate} from '@neos-project/neos-ui-i18n';
 import {createState} from '@neos-project/framework-observable';
 import {EditorComponents, SlideEditor} from "../SlideEditor";
 import {SlideBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
+import style from './style.module.css';
 
 export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorComponents: EditorComponents}) => () => {
     const {isOpen, initialValue} = useLatestState(deps.editor.state$);
@@ -69,18 +70,20 @@ const SlideshowEditorDialog: React.FC<{
                 style="auto"
                 autoFocus={true}
                 actions={[
-                    <Button onClick={() => setOpenedSlideId(previousSlideId)} disabled={!previousSlideId}>
-                        {translate('Todo:todo:todo', 'Previous')}
-                    </Button>,
-                    <Button onClick={() => setOpenedSlideId(nextSlideId)} disabled={!nextSlideId}>
-                        {translate('Todo:todo:todo', 'Next')}
-                    </Button>,
                     <Button onClick={backToOverview}>
                         {translate('Todo:todo:todo', 'Back')}
                     </Button>
                 ]}
             >
-                <SlideEditor editor={editor} slideBuilder={slideBuilder} updateSlide={updateSlide} editorComponents={editorComponents} />
+                <SlideEditor editor={editor} slideBuilder={slideBuilder} slideshowBuilder$={slideshowBuilder$} editorComponents={editorComponents} />
+                <div className={style.navigationCorner}>
+                    <Button onClick={() => setOpenedSlideId(previousSlideId)} disabled={!previousSlideId}>
+                        {translate('Todo:todo:todo', 'Previous')}
+                    </Button>
+                    <Button onClick={() => setOpenedSlideId(nextSlideId)} disabled={!nextSlideId}>
+                        {translate('Todo:todo:todo', 'Next')}
+                    </Button>
+                </div>
             </Dialog>
         );
     }

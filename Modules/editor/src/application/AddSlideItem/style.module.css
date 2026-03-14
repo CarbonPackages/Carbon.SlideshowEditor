@@ -1,0 +1,30 @@
+.addRow {
+    display: flex;
+    justify-content: center;
+}
+
+.addContents {
+    background: var(--colors-ContrastDarkest);
+    border: 1px solid var(--colors-PrimaryBlue);
+    padding: 1rem;
+    margin: 0;
+    inset: auto;
+}
+
+.addContentsGrid {
+    display: flex;
+    gap: 10px;
+}
+
+.addContents {
+    position-anchor: --neos-LinkEditor-Advanced-anchor;
+    top: calc(anchor(bottom) + 10px);
+}
+
+.addButton {
+    anchor-name: --neos-LinkEditor-Advanced-anchor;
+}
+
+.addButton:focus {
+    outline: none;
+}

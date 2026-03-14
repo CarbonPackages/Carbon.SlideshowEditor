@@ -4,7 +4,7 @@ import {VideoSlideItemBuilder} from "./VideoSlideItemBuilder.ts";
 import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 import {TextSlideItemBuilder} from "./TextSlideItemBuilder.ts";
 
-type SlideItemBuilder = ImageSlideItemBuilder;
+export type SlideItemBuilder = TextSlideItemBuilder | ImageSlideItemBuilder | VideoSlideItemBuilder;
 
 export class SlideBuilder
 {

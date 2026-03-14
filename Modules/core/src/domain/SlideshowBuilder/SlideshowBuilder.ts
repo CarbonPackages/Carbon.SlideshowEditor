@@ -61,6 +61,20 @@ export class SlideshowBuilder
         return this.data.slideBuilderMap[id];
     }
 
+    public previousSlideId(id: string): string | null
+    {
+        this.assertSlideExists(id);
+        const index = this.data.orderedSlideIds.indexOf(id);
+        return this.data.orderedSlideIds[index - 1] ?? null;
+    }
+
+    public nextSlideId(id: string): string | null
+    {
+        this.assertSlideExists(id);
+        const index = this.data.orderedSlideIds.indexOf(id);
+        return this.data.orderedSlideIds[index + 1] ?? null;
+    }
+
     public withMovedSlide(slideId: string, newSucceedingSlideId: string): SlideshowBuilder
     {
         this.assertSlideExists(slideId);

@@ -7,7 +7,7 @@ import {useLatestState} from '@neos-project/framework-observable-react';
 import {translate} from '@neos-project/neos-ui-i18n';
 import style from './style.module.css';
 
-export const createNestedDialog = (editor: IEditor) => () => {
+export const createNestedEditorDialog = (editor: IEditor) => function NestedEditorDialog() {
     const {nestedEditor} = useLatestState(editor.state$);
 
     if (nestedEditor) {

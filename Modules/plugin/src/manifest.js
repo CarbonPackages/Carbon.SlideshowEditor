@@ -1,6 +1,6 @@
 
 import {createEditor} from '@carbon/slideshoweditor-core';
-import {createDialog, createNestedDialog, createInspectorEditor} from '@carbon/slideshoweditor-editor';
+import {createSlideshowEditorDialog, createNestedEditorDialog, createInspectorEditor} from '@carbon/slideshoweditor-editor';
 
 import manifest from '@neos-project/neos-ui-extensibility';
 
@@ -13,12 +13,12 @@ manifest('@carbon/slideshoweditor-plugin', {}, (globalRegistry) => {
 
 	containersRegistry.set(
 		'Modals/CarbonSlideshowEditor',
-		createDialog({editor, editorRegistry})
+		createSlideshowEditorDialog({editor, editorRegistry})
 	);
 
 	containersRegistry.set(
 		'Modals/CarbonSlideshowEditorNestedEditor',
-		createNestedDialog(editor),
+		createNestedEditorDialog(editor),
 	);
 
 	editorRegistry.set('Carbon.SlideshowEditor/Inspector/Editors/SlideshowEditor', {

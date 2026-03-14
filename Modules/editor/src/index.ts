@@ -1,1 +1,1 @@
-export {createDialog, createNestedDialog, createInspectorEditor} from './application';
+export {createSlideshowEditorDialog, createNestedEditorDialog, createInspectorEditor} from './application';

@@ -6,6 +6,7 @@ import {
     VideoSlideItemBuilder
 } from "@carbon/slideshoweditor-core";
 import {IconButton, Icon, Button} from '@neos-project/react-ui-components';
+import {translate} from '@neos-project/neos-ui-i18n';
 import style from './style.module.css';
 
 let globalId = 0;
@@ -36,6 +37,7 @@ export const AddSlideItem: React.FC<{
             style="lighter"
             hoverStyle="brand"
             className={style.addButton}
+            title={translate('x:x:x', 'Insert item')}
         >
         </IconButton>
     </div>;

@@ -1,0 +1,30 @@
+.slideItem {
+    outline-offset: 5px;
+    outline: 2px dashed var(--colors-ContrastDark);
+    position: relative;
+}
+
+.slideItem:hover {
+    outline: 2px dashed var(--colors-PrimaryBlue);
+
+    & [data-carbon-inline-toolbar] {
+        display: flex;
+    }
+}
+
+.slideItem::before {
+    /** dummy space reservation for the toolbar to show on hover */
+    content: '';
+    position: absolute;
+    top: -36px;
+    right: 0;
+    display: block;
+    /** dont overlay with the add button in the middle */
+    width: calc(50% - 20px);
+    height: 100px;
+}
+
+.slideItem :global(.ck-toolbar) {
+    border: none;
+    border-bottom: 2px solid var(--colors-ContrastDark);
+}

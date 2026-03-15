@@ -14,12 +14,10 @@
     content: '';
     display: block;
     position: absolute;
+    top: 19px;
     width: calc(50% - 30px);
-    height: 21px;
-    background-image: linear-gradient(to right, var(--carbon-SlideItemAdd-color) 33%, rgba(255, 255, 255, 0) 0%);
-    background-position: bottom;
-    background-size: 19px 2px;
-    background-repeat: repeat-x;
+    height: 2px;
+    border-top: 2px dashed var(--carbon-SlideItemAdd-color);;
 }
 
 .addRow::before {

@@ -8,6 +8,8 @@ import {
     VideoSlideItemBuilder
 } from "@carbon/slideshoweditor-core";
 import {AddSlideItem} from "../AddSlideItem";
+import style from './style.module.css';
+import {InlineToolbar} from "../InlineToolbar";
 
 export type EditorComponents = {
     ImageEditor: React.ComponentType,
@@ -54,42 +56,46 @@ export const SlideEditor: React.FC<{
             return <div key={slideItemBuilder.id}>
                 <AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
 
-                {slideItemBuilder instanceof TextSlideItemBuilder ? (
-                    <CKEditorRichTextEditor
-                        options={{
-                            formatting: {
-                                img: true,
-                                a: true,
-                                strong: true,
-                                b: true,
-                            }
-                        }}
-                        value={slideItemBuilder.text}
-                        onChange={(text) => updatedItem(slideItemBuilder => slideItemBuilder.withText(text))}
-                        renderSecondaryInspector={editor.transactions.renderNestedEditor}
-                    />
-                ) : ''}
+                <div className={style.slideItem}>
+                    <InlineToolbar />
 
-                {slideItemBuilder instanceof ImageSlideItemBuilder ? (
-                    <ImageEditor
-                        options={{
-                            features: {
-                                crop: false
-                            }
-                        }}
-                        value={slideItemBuilder.flowImageObject}
-                        commit={(flowImageObject) => updatedItem(slideItemBuilder => slideItemBuilder.withFlowImageObject(flowImageObject))}
-                        renderSecondaryInspector={editor.transactions.renderNestedEditor}
-                    />
-                ) : ''}
+                    {slideItemBuilder instanceof TextSlideItemBuilder ? (
+                        <CKEditorRichTextEditor
+                            options={{
+                                formatting: {
+                                    img: true,
+                                    a: true,
+                                    strong: true,
+                                    b: true,
+                                }
+                            }}
+                            value={slideItemBuilder.text}
+                            onChange={(text) => updatedItem(slideItemBuilder => slideItemBuilder.withText(text))}
+                            renderSecondaryInspector={editor.transactions.renderNestedEditor}
+                        />
+                    ) : ''}
 
-                {slideItemBuilder instanceof VideoSlideItemBuilder ? (
-                    <VideoEditor
-                        value={slideItemBuilder.video}
-                        commit={(video) => updatedItem(slideItemBuilder => slideItemBuilder.withVideo(video))}
-                        renderSecondaryInspector={editor.transactions.renderNestedEditor}
-                    />
-                ) : ''}
+                    {slideItemBuilder instanceof ImageSlideItemBuilder ? (
+                        <ImageEditor
+                            options={{
+                                features: {
+                                    crop: false
+                                }
+                            }}
+                            value={slideItemBuilder.flowImageObject}
+                            commit={(flowImageObject) => updatedItem(slideItemBuilder => slideItemBuilder.withFlowImageObject(flowImageObject))}
+                            renderSecondaryInspector={editor.transactions.renderNestedEditor}
+                        />
+                    ) : ''}
+
+                    {slideItemBuilder instanceof VideoSlideItemBuilder ? (
+                        <VideoEditor
+                            value={slideItemBuilder.video}
+                            commit={(video) => updatedItem(slideItemBuilder => slideItemBuilder.withVideo(video))}
+                            renderSecondaryInspector={editor.transactions.renderNestedEditor}
+                        />
+                    ) : ''}
+                </div>
             </div>;
         })}
 

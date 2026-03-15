@@ -1,0 +1,44 @@
+.toolBar__btnGroup__btn {
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+    justify-content: center;
+
+    &:hover {
+        background-color: var(--colors-PrimaryBlueHover);
+    }
+
+    & svg {
+        width: 1em;
+    }
+}
+
+[data-carbon-inline-toolbar] {
+    display: none;
+    background: var(--colors-PrimaryBlue);
+    position: relative;
+}
+
+.contextToolBar {
+    position: absolute;
+    right: 10px;
+    top: -37px;
+}
+
+.contextToolbar__nodeLabel {
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+    font-size: var(--fontSize-Small);
+
+    &:has(~ :popover-open) {
+        background-color: var(--colors-PrimaryBlueHover);
+    }
+}
+
+.contextToolbar__nodeLabel span {
+    max-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

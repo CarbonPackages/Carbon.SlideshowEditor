@@ -110,6 +110,31 @@ export class SlideBuilder
         });
     }
 
+    public withMovedItem(slideItemId: string, newSucceedingSiblingItemId: string | null): SlideBuilder
+    {
+        this.assertItemExists(slideItemId);
+        if (newSucceedingSiblingItemId !== null) {
+            this.assertItemExists(newSucceedingSiblingItemId);
+        }
+
+        if (slideItemId === newSucceedingSiblingItemId) {
+            return this;
+        }
+
+        const succeedingSlideIndex = newSucceedingSiblingItemId ? this.data.orderedItemIds.indexOf(newSucceedingSiblingItemId) : this.data.orderedItemIds.length;
+
+        const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideIndex).filter(id => id !== slideItemId);
+        const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideIndex).filter(id => id !== slideItemId);
+
+        const orderedItemIds = [...precedingPart, slideItemId, ...succeedingPart];
+
+        return new SlideBuilder({
+            ...this.data,
+            isDirty: true,
+            orderedItemIds,
+        })
+    }
+
     public withRemovedItem(slideItemId: string): SlideBuilder
     {
         this.assertItemExists(slideItemId);

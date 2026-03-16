@@ -75,20 +75,21 @@ export class SlideshowBuilder
         return this.data.orderedSlideIds[index + 1] ?? null;
     }
 
-    public withMovedSlide(slideId: string, newSucceedingSiblingSlideId: string): SlideshowBuilder
+    public withMovedSlide(slideId: string, newSucceedingSiblingSlideId: string | null): SlideshowBuilder
     {
         this.assertSlideExists(slideId);
-        this.assertSlideExists(newSucceedingSiblingSlideId);
+        if (newSucceedingSiblingSlideId !== null) {
+            this.assertSlideExists(newSucceedingSiblingSlideId);
+        }
 
         if (slideId === newSucceedingSiblingSlideId) {
             return this;
         }
 
-        const succeedingSlideIndex = this.data.orderedSlideIds.indexOf(newSucceedingSiblingSlideId);
+        const succeedingSlideIndex = newSucceedingSiblingSlideId ? this.data.orderedSlideIds.indexOf(newSucceedingSiblingSlideId) : this.data.orderedSlideIds.length;
 
-        const slideIdsWithoutMoved = this.data.orderedSlideIds.filter(id => id !== slideId);
-        const precedingPart = slideIdsWithoutMoved.slice(0, succeedingSlideIndex);
-        const succeedingPart = slideIdsWithoutMoved.slice(succeedingSlideIndex);
+        const precedingPart = this.data.orderedSlideIds.slice(0, succeedingSlideIndex).filter(id => id !== slideId);
+        const succeedingPart = this.data.orderedSlideIds.slice(succeedingSlideIndex).filter(id => id !== slideId);
 
         const orderedSlideIds = [...precedingPart, slideId, ...succeedingPart];
 

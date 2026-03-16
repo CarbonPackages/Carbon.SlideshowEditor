@@ -5,22 +5,18 @@ import type {ISlideshow} from "../Slideshow";
 import {SlidePathToIdMapping} from "./SlidePathToIdMapping.ts";
 
 describe('SlideBuilder Move', () => {
-    it('move slide from middle to start', () => {
+    it('move slide item from middle to start', () => {
         const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
@@ -29,12 +25,15 @@ describe('SlideBuilder Move', () => {
             ],
             SlidePathToIdMapping.create({
                 's0': 'slide0',
-                's1': 'slide1',
-                's2': 'slide2',
+                's0i0': 'firstItem',
+                's0i1': 'secondItem',
+                's0i2': 'thirdItem',
             })
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide1', 'slide0');
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withMovedItem('secondItem', 'firstItem')
+        );
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -45,15 +44,11 @@ describe('SlideBuilder Move', () => {
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
@@ -63,22 +58,18 @@ describe('SlideBuilder Move', () => {
         );
     });
 
-    it('move slide from start to middle', () => {
+    it('move slide item from start to middle', () => {
         const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
@@ -87,12 +78,15 @@ describe('SlideBuilder Move', () => {
             ],
             SlidePathToIdMapping.create({
                 's0': 'slide0',
-                's1': 'slide1',
-                's2': 'slide2',
+                's0i0': 'firstItem',
+                's0i1': 'secondItem',
+                's0i2': 'thirdItem',
             })
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide0', 'slide2');
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withMovedItem('firstItem', 'thirdItem')
+        );
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -103,40 +97,32 @@ describe('SlideBuilder Move', () => {
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
-                    }
-                ],
+                    },
+                ]
             ] as ISlideshow,
         );
     });
 
-    it('move slide from end to middle', () => {
+    it('move slide item from end to middle', () => {
         const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
@@ -145,12 +131,15 @@ describe('SlideBuilder Move', () => {
             ],
             SlidePathToIdMapping.create({
                 's0': 'slide0',
-                's1': 'slide1',
-                's2': 'slide2',
+                's0i0': 'firstItem',
+                's0i1': 'secondItem',
+                's0i2': 'thirdItem',
             })
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide2', 'slide1');
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withMovedItem('thirdItem', 'secondItem')
+        );
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -161,40 +150,32 @@ describe('SlideBuilder Move', () => {
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
+                    },
+                ]
             ] as ISlideshow,
         );
     });
 
-    it('move slide from start to end', () => {
+    it('move slide item from start to end', () => {
         const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
@@ -203,12 +184,15 @@ describe('SlideBuilder Move', () => {
             ],
             SlidePathToIdMapping.create({
                 's0': 'slide0',
-                's1': 'slide1',
-                's2': 'slide2',
+                's0i0': 'firstItem',
+                's0i1': 'secondItem',
+                's0i2': 'thirdItem',
             })
         );
 
-        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide0', null);
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withMovedItem('firstItem',  null)
+        );
 
         equal(newSlideshowBuilder.isDirty, true)
 
@@ -219,20 +203,16 @@ describe('SlideBuilder Move', () => {
                     {
                         type: "image",
                         imageId: "second"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "third"
-                    }
-                ],
-                [
+                    },
                     {
                         type: "image",
                         imageId: "first"
-                    }
-                ],
+                    },
+                ]
             ] as ISlideshow,
         );
     });

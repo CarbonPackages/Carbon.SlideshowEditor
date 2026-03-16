@@ -12,6 +12,10 @@ import style from './style.module.css';
 import {InlineToolbar} from "../InlineToolbar";
 import {DragItem} from "../InlineToolbar/DragItem.tsx";
 import {DeleteItem} from "../InlineToolbar/DeleteItem.tsx";
+import {DragAndDropSlideItem, startDraggingSlideItemFactoryFn} from "../DragAndDropSlideItem";
+import {useLatestState} from '@neos-project/framework-observable-react';
+import {createState} from '@neos-project/framework-observable';
+import {DragContext} from "../DragAndDropSlideItem/DragContext.ts";
 
 export type EditorComponents = {
     ImageEditor: React.ComponentType,
@@ -40,7 +44,7 @@ export const SlideEditor: React.FC<{
         )
     }, [slideshowBuilder$, slideBuilder.id]);
 
-    const removeSlideItemFactoryFn = React.useCallback((slideItemId: string | null) => (slideItemBuilder: SlideItemBuilder) => {
+    const removeSlideItemFactoryFn = React.useCallback((slideItemId: string | null) => () => {
         slideshowBuilder$.update(
             (slideshowBuilder) => slideshowBuilder.withUpdatedSlide(
                 slideshowBuilder.getById(slideBuilder.id).withRemovedItem(
@@ -49,6 +53,20 @@ export const SlideEditor: React.FC<{
             )
         )
     }, [slideshowBuilder$, slideBuilder.id]);
+
+    const moveSlideItemFactoryFn = React.useCallback((succeedingSiblingItemId: string | null) => (slideItemId: string) => {
+        slideshowBuilder$.update(
+            (slideshowBuilder) => slideshowBuilder.withUpdatedSlide(
+                slideshowBuilder.getById(slideBuilder.id).withMovedItem(
+                    slideItemId,
+                    succeedingSiblingItemId
+                )
+            )
+        )
+    }, [slideshowBuilder$, slideBuilder.id]);
+
+    const dragContext$ = React.useMemo(() => createState(DragContext.none()), []);
+    const dragContext: DragContext = useLatestState(dragContext$);
 
     return <div>
         {slideBuilder.items.map((slideItemBuilder) => {
@@ -66,14 +84,16 @@ export const SlideEditor: React.FC<{
             };
 
             return <div key={slideItemBuilder.id}>
-                <AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
+                <DragAndDropSlideItem targetSlideItemId={slideItemBuilder.id} dragContext$={dragContext$} moveSlideItem={moveSlideItemFactoryFn(slideItemBuilder.id)}>
+                    <AddSlideItem isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideItemBuilder.id} createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
+                </DragAndDropSlideItem>
 
                 <div className={style.slideItem}>
                     <InlineToolbar
                         label={slideItemBuilder.label}
                         icon={slideItemBuilder.icon}
-                        primaryToolBar={[<DragItem />]}
-                        secondaryToolbar={[<DeleteItem onDelete={removeSlideItemFactoryFn(slideItemBuilder.id)} />]}
+                        primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideItemBuilder.id)} />]}
+                        secondaryToolbar={[<DeleteItem key="delete" onDelete={removeSlideItemFactoryFn(slideItemBuilder.id)} />]}
                     />
 
                     {slideItemBuilder instanceof TextSlideItemBuilder ? (
@@ -115,6 +135,8 @@ export const SlideEditor: React.FC<{
             </div>;
         })}
 
-        <AddSlideItem createdSlideItem={createSlideItemFactoryFn(null)} />
+        <DragAndDropSlideItem targetSlideItemId={null} dragContext$={dragContext$} moveSlideItem={moveSlideItemFactoryFn(null)}>
+            <AddSlideItem isDragging={dragContext.isDragging} isDragover={dragContext.isDragoverLast} createdSlideItem={createSlideItemFactoryFn(null)} />
+        </DragAndDropSlideItem>
     </div>;
 }

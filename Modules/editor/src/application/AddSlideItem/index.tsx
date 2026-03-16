@@ -7,19 +7,22 @@ import {
 } from "@carbon/slideshoweditor-core";
 import {IconButton, Icon, Button} from '@neos-project/react-ui-components';
 import {translate} from '@neos-project/neos-ui-i18n';
+import mergeClassNames from 'classnames';
 import style from './style.module.css';
 
 let globalId = 0;
 
 export const AddSlideItem: React.FC<{
+    isDragging: boolean,
+    isDragover: boolean,
     createdSlideItem: (slideBuilder: SlideBuilder) => void;
-}> = ({createdSlideItem}) => {
+}> = ({isDragging, isDragover, createdSlideItem}) => {
     const id = React.useMemo(() => ++globalId, []);
 
     const popoverId = `carbon-SlideItemAdd-popover-${id}`;
     const anchorId = `carbon-SlideItemAdd-anchor-${id}`;
 
-    return <div className={style.addRow} style={{'--carbon-SlideItemAdd-anchor-name': anchorId}}>
+    return <div className={mergeClassNames(style.addRow, {[style.addRowHover]: isDragging})} style={{'--carbon-SlideItemAdd-anchor-name': anchorId}}>
         <div
             id={popoverId}
             popover="auto"
@@ -32,11 +35,11 @@ export const AddSlideItem: React.FC<{
             </div>
         </div>
         <IconButton
-            icon="plus"
+            icon={isDragging ? 'paste' : "plus"}
             popovertarget={popoverId}
             style="lighter"
             hoverStyle="brand"
-            className={style.addButton}
+            className={mergeClassNames(style.addButton, {[style.addButtonHover]: isDragover})}
             title={translate('x:x:x', 'Insert item')}
         >
         </IconButton>

@@ -6,7 +6,6 @@ import {useSelector} from '@neos-project/neos-ui-redux-store';
 import {translate} from '@neos-project/neos-ui-i18n';
 import {createState} from '@neos-project/framework-observable';
 import {EditorComponents, SlideEditor} from "../SlideEditor";
-import {SlideBuilder} from "@carbon/slideshoweditor-core/src/domain/SlideshowBuilder/SlideBuilder.ts";
 import style from './style.module.css';
 
 export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorComponents: EditorComponents}) => () => {

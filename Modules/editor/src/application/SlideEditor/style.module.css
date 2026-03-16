@@ -26,5 +26,5 @@
 
 .slideItem :global(.ck-toolbar) {
     border: none;
-    border-bottom: 2px solid var(--colors-ContrastDark);
+    border-bottom: 2px solid var(--colors-ContrastDarker);
 }

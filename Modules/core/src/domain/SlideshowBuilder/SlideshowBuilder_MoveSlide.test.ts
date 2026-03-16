@@ -236,4 +236,46 @@ describe('SlideBuilder Move', () => {
             ] as ISlideshow,
         );
     });
+
+    it('move slide to same position isolation', () => {
+        const slideshowBuilder = SlideshowBuilder.createFromValue(
+            [
+                [
+                    {
+                        type: "image",
+                        imageId: "first"
+                    }
+                ],
+                [
+                    {
+                        type: "image",
+                        imageId: "second"
+                    }
+                ],
+                [
+                    {
+                        type: "image",
+                        imageId: "third"
+                    }
+                ]
+            ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's1': 'slide1',
+                's2': 'slide2',
+            })
+        );
+
+        const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide0', 'slide0');
+
+        deepEqual(newSlideshowBuilder.build(), slideshowBuilder.build())
+        equal(newSlideshowBuilder.isDirty, false)
+        equal(newSlideshowBuilder, slideshowBuilder)
+
+        const newSlideshowBuilder2 = slideshowBuilder.withMovedSlide('slide0', 'slide1');
+
+        deepEqual(newSlideshowBuilder2.build(), slideshowBuilder.build())
+        equal(newSlideshowBuilder2.isDirty, false)
+        equal(newSlideshowBuilder, slideshowBuilder)
+    });
 });

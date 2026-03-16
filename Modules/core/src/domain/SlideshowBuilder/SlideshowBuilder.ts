@@ -88,6 +88,10 @@ export class SlideshowBuilder
 
         const succeedingSlideIndex = newSucceedingSiblingSlideId ? this.data.orderedSlideIds.indexOf(newSucceedingSiblingSlideId) : this.data.orderedSlideIds.length;
 
+        if ((this.data.orderedSlideIds.indexOf(slideId) + 1) === succeedingSlideIndex) {
+            return this;
+        }
+
         const precedingPart = this.data.orderedSlideIds.slice(0, succeedingSlideIndex).filter(id => id !== slideId);
         const succeedingPart = this.data.orderedSlideIds.slice(succeedingSlideIndex).filter(id => id !== slideId);
 
@@ -118,6 +122,10 @@ export class SlideshowBuilder
     public withUpdatedSlide(slideBuilder: SlideBuilder): SlideshowBuilder
     {
         this.assertSlideExists(slideBuilder.id);
+
+        if (this.data.slideBuilderMap[slideBuilder.id] === slideBuilder) {
+            return this;
+        }
 
         const slideBuilderMap = {...this.data.slideBuilderMap, [slideBuilder.id]: slideBuilder};
 

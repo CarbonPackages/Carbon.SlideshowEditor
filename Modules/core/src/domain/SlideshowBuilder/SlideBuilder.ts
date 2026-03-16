@@ -121,10 +121,14 @@ export class SlideBuilder
             return this;
         }
 
-        const succeedingSlideIndex = newSucceedingSiblingItemId ? this.data.orderedItemIds.indexOf(newSucceedingSiblingItemId) : this.data.orderedItemIds.length;
+        const succeedingSlideItemIndex = newSucceedingSiblingItemId ? this.data.orderedItemIds.indexOf(newSucceedingSiblingItemId) : this.data.orderedItemIds.length;
 
-        const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideIndex).filter(id => id !== slideItemId);
-        const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideIndex).filter(id => id !== slideItemId);
+        if ((this.data.orderedItemIds.indexOf(slideItemId) + 1) === succeedingSlideItemIndex) {
+            return this;
+        }
+
+        const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideItemIndex).filter(id => id !== slideItemId);
+        const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideItemIndex).filter(id => id !== slideItemId);
 
         const orderedItemIds = [...precedingPart, slideItemId, ...succeedingPart];
 
@@ -159,10 +163,10 @@ export class SlideBuilder
         if (succeedingSiblingItemId !== null) {
             this.assertItemExists(succeedingSiblingItemId);
 
-            const succeedingSlideIndex = this.data.orderedItemIds.indexOf(succeedingSiblingItemId);
+            const succeedingSlideItemIndex = this.data.orderedItemIds.indexOf(succeedingSiblingItemId);
 
-            const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideIndex);
-            const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideIndex);
+            const precedingPart = this.data.orderedItemIds.slice(0, succeedingSlideItemIndex);
+            const succeedingPart = this.data.orderedItemIds.slice(succeedingSlideItemIndex);
 
             const orderedItemIds = [...precedingPart, slideItemBuilder.id, ...succeedingPart];
             const itemBuilderMap = {...this.data.itemBuilderMap, [slideItemBuilder.id]: slideItemBuilder};

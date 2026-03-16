@@ -42,3 +42,32 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+
+.toolBar__contextMenuWrapper {
+    position: relative;
+    anchor-name: var(--carbon-SlideItemToolBar-anchor-name);
+}
+
+.toolBar__contextMenu {
+    width: max-content;
+    position-anchor: var(--carbon-SlideItemToolBar-anchor-name);
+    right: anchor(right);
+    top: anchor(bottom);
+    left: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--colors-ContrastBrightest);
+    border: 1px solid var(--colors-ContrastDark);
+}
+
+.toolBar__contextMenu button {
+    justify-content: space-between;
+    color: currentColor;
+}
+.toolBar__contextMenu button:hover {
+    color: var(--colors-ContrastBrightest);
+}
+.toolBar__contextMenu button svg {
+    color: currentColor;
+}

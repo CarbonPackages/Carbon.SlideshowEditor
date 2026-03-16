@@ -34,6 +34,16 @@ export class ImageSlideItemBuilder
         });
     }
 
+    public get icon(): string
+    {
+        return 'image';
+    }
+
+    public get label(): string
+    {
+        return 'Image';
+    }
+
     public get id(): string
     {
         return this.data.id;

@@ -10,6 +10,8 @@ import {
 import {AddSlideItem} from "../AddSlideItem";
 import style from './style.module.css';
 import {InlineToolbar} from "../InlineToolbar";
+import {DragItem} from "../InlineToolbar/DragItem.tsx";
+import {DeleteItem} from "../InlineToolbar/DeleteItem.tsx";
 
 export type EditorComponents = {
     ImageEditor: React.ComponentType,
@@ -38,6 +40,16 @@ export const SlideEditor: React.FC<{
         )
     }, [slideshowBuilder$, slideBuilder.id]);
 
+    const removeSlideItemFactoryFn = React.useCallback((slideItemId: string | null) => (slideItemBuilder: SlideItemBuilder) => {
+        slideshowBuilder$.update(
+            (slideshowBuilder) => slideshowBuilder.withUpdatedSlide(
+                slideshowBuilder.getById(slideBuilder.id).withRemovedItem(
+                    slideItemId
+                )
+            )
+        )
+    }, [slideshowBuilder$, slideBuilder.id]);
+
     return <div>
         {slideBuilder.items.map((slideItemBuilder) => {
             // ToDo use React.useCallback
@@ -57,13 +69,17 @@ export const SlideEditor: React.FC<{
                 <AddSlideItem createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
 
                 <div className={style.slideItem}>
-                    <InlineToolbar />
+                    <InlineToolbar
+                        label={slideItemBuilder.label}
+                        icon={slideItemBuilder.icon}
+                        primaryToolBar={[<DragItem />]}
+                        secondaryToolbar={[<DeleteItem onDelete={removeSlideItemFactoryFn(slideItemBuilder.id)} />]}
+                    />
 
                     {slideItemBuilder instanceof TextSlideItemBuilder ? (
                         <CKEditorRichTextEditor
                             options={{
                                 formatting: {
-                                    img: true,
                                     a: true,
                                     strong: true,
                                     b: true,

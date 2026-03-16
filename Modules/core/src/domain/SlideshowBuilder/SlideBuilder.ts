@@ -110,6 +110,21 @@ export class SlideBuilder
         });
     }
 
+    public withRemovedItem(slideItemId: string): SlideBuilder
+    {
+        this.assertItemExists(slideItemId);
+
+        const {[slideItemId]: _, ...itemBuilderMap} = this.data.itemBuilderMap;
+        const orderedItemIds = this.data.orderedItemIds.filter(id => id !== slideItemId);
+
+        return new SlideBuilder({
+            ...this.data,
+            isDirty: true,
+            itemBuilderMap,
+            orderedItemIds,
+        });
+    }
+
     public withCreatedItem(slideItemBuilder: SlideItemBuilder, succeedingSiblingItemId: string | null = null): SlideBuilder
     {
         if (this.data.orderedItemIds.includes(slideItemBuilder.id)) {

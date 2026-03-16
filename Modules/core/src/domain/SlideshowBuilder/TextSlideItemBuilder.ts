@@ -29,6 +29,16 @@ export class TextSlideItemBuilder
         });
     }
 
+    public get icon(): string
+    {
+        return 'paragraph';
+    }
+
+    public get label(): string
+    {
+        return 'Text';
+    }
+
     public get id(): string
     {
         return this.data.id;

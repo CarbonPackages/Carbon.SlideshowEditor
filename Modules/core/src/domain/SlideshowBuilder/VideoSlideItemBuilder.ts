@@ -29,6 +29,16 @@ export class VideoSlideItemBuilder
         });
     }
 
+    public get icon(): string
+    {
+        return 'video';
+    }
+
+    public get label(): string
+    {
+        return 'Video';
+    }
+
     public get id(): string
     {
         return this.data.id;

@@ -36,6 +36,10 @@ describe('SlideBuilder Move', () => {
 
         const newSlideshowBuilder = slideshowBuilder.withMovedSlide('slide1', 'slide0');
 
+        // original builder is not modified
+        deepEqual(slideshowBuilder.slides.map(slide => slide.id), ['slide0', 'slide1', 'slide2']);
+        deepEqual(newSlideshowBuilder.slides.map(slide => slide.id), ['slide1', 'slide0', 'slide2']);
+
         equal(newSlideshowBuilder.isDirty, true)
 
         deepEqual(
@@ -237,7 +241,7 @@ describe('SlideBuilder Move', () => {
         );
     });
 
-    it('move slide to same position isolation', () => {
+    it('move slide to same position', () => {
         const slideshowBuilder = SlideshowBuilder.createFromValue(
             [
                 [
@@ -276,6 +280,12 @@ describe('SlideBuilder Move', () => {
 
         deepEqual(newSlideshowBuilder2.build(), slideshowBuilder.build())
         equal(newSlideshowBuilder2.isDirty, false)
+        equal(newSlideshowBuilder, slideshowBuilder)
+
+        const newSlideshowBuilder3 = slideshowBuilder.withMovedSlide('slide2', null);
+
+        deepEqual(newSlideshowBuilder3.build(), slideshowBuilder.build())
+        equal(newSlideshowBuilder3.isDirty, false)
         equal(newSlideshowBuilder, slideshowBuilder)
     });
 });

@@ -66,4 +66,31 @@ describe('SlideBuilder', () => {
             ] as ISlideshow,
         );
     });
+
+    it('update slide item to same value', () => {
+        const slideshowBuilder = SlideshowBuilder.createFromValue(
+            [
+                [
+                    {
+                        type: "text",
+                        text: "My first text"
+                    }
+                ],
+            ],
+            SlidePathToIdMapping.create({
+                's0': 'slide0',
+                's0i0': 'firstText',
+            })
+        );
+
+        const newSlideshowBuilder = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withUpdatedItem(
+                slideshowBuilder.getById('slide0').getById('firstText').withText('My first text')
+            )
+        );
+
+        deepEqual(newSlideshowBuilder.build(), slideshowBuilder.build());
+        equal(newSlideshowBuilder.isDirty, false);
+        equal(newSlideshowBuilder, slideshowBuilder);
+    });
 });

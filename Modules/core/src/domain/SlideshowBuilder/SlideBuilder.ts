@@ -101,6 +101,10 @@ export class SlideBuilder
     {
         this.assertItemExists(slideItemBuilder.id);
 
+        if (this.data.itemBuilderMap[slideItemBuilder.id] === slideItemBuilder) {
+            return this;
+        }
+
         const itemBuilderMap = {...this.data.itemBuilderMap, [slideItemBuilder.id]: slideItemBuilder};
 
         return new SlideBuilder({

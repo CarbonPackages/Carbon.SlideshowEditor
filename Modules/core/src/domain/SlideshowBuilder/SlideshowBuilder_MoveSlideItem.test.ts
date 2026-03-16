@@ -247,6 +247,7 @@ describe('SlideBuilder Move', () => {
             slideshowBuilder.getById('slide0').withMovedItem('firstItem',  'firstItem')
         );
 
+        deepEqual(newSlideshowBuilder.build(), slideshowBuilder.build())
         equal(newSlideshowBuilder.isDirty, false)
         equal(newSlideshowBuilder, slideshowBuilder)
 
@@ -254,7 +255,16 @@ describe('SlideBuilder Move', () => {
             slideshowBuilder.getById('slide0').withMovedItem('firstItem',  'secondItem')
         );
 
+        deepEqual(newSlideshowBuilder2.build(), slideshowBuilder.build())
         equal(newSlideshowBuilder2.isDirty, false)
         equal(newSlideshowBuilder2, slideshowBuilder)
+
+        const newSlideshowBuilder3 = slideshowBuilder.withUpdatedSlide(
+            slideshowBuilder.getById('slide0').withMovedItem('thirdItem',  null)
+        );
+
+        deepEqual(newSlideshowBuilder3.build(), slideshowBuilder.build())
+        equal(newSlideshowBuilder3.isDirty, false)
+        equal(newSlideshowBuilder3, slideshowBuilder)
     });
 });

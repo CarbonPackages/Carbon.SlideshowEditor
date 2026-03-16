@@ -57,6 +57,9 @@ export class TextSlideItemBuilder
 
     public withText(text: string): TextSlideItemBuilder
     {
+        if (this.data.text === text) {
+            return this;
+        }
         return new TextSlideItemBuilder({
             ...this.data,
             isDirty: true,

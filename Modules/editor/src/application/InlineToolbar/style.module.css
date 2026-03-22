@@ -13,10 +13,41 @@
     }
 }
 
-[data-carbon-inline-toolbar] {
+.inlineToolBar {
     display: none;
     background: var(--colors-PrimaryBlue);
     position: relative;
+}
+
+.itemAndToolBarContainer:hover .inlineToolBar {
+    display: flex;
+}
+
+.itemAndToolBarContainer::before {
+    /** dummy space reservation for the toolbar to show on hover */
+    content: '';
+    position: absolute;
+    top: -36px;
+    right: 0;
+    display: block;
+    /** dont overlay with the add button in the middle */
+    width: max(calc(50% - 20px), 150px);
+    height: 100px;
+}
+
+.itemAndToolBarContainer {
+    outline-offset: 5px;
+    outline: 2px dashed var(--colors-ContrastDark);
+    position: relative;
+}
+
+.itemAndToolBarContainer:hover {
+    outline: 2px dashed var(--colors-PrimaryBlue);
+}
+
+.itemAndToolBarContainer :global(.ck-toolbar) {
+    border: none;
+    border-bottom: 2px solid var(--colors-ContrastDarker);
 }
 
 .contextToolBar {

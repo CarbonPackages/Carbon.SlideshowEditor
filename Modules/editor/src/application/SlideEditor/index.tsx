@@ -8,7 +8,6 @@ import {
     VideoSlideItemBuilder
 } from "@carbon/slideshoweditor-core";
 import {AddSlideItem} from "../AddSlideItem";
-import style from './style.module.css';
 import {InlineToolbar} from "../InlineToolbar";
 import {DragItem} from "../InlineToolbar/DragItem.tsx";
 import {DeleteItem} from "../InlineToolbar/DeleteItem.tsx";
@@ -88,14 +87,12 @@ export const SlideEditor: React.FC<{
                     <AddSlideItem isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideItemBuilder.id} createdSlideItem={createSlideItemFactoryFn(slideItemBuilder.id)} />
                 </DragAndDropSlideItem>
 
-                <div className={style.slideItem}>
-                    <InlineToolbar
-                        label={slideItemBuilder.label}
-                        icon={slideItemBuilder.icon}
-                        primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideItemBuilder.id)} />]}
-                        secondaryToolbar={[<DeleteItem key="delete" onDelete={removeSlideItemFactoryFn(slideItemBuilder.id)} />]}
-                    />
-
+                <InlineToolbar
+                    label={slideItemBuilder.label}
+                    icon={slideItemBuilder.icon}
+                    primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideItemBuilder.id)} />]}
+                    secondaryToolbar={[<DeleteItem key="delete" onDelete={removeSlideItemFactoryFn(slideItemBuilder.id)} />]}
+                >
                     {slideItemBuilder instanceof TextSlideItemBuilder ? (
                         <CKEditorRichTextEditor
                             options={{
@@ -131,7 +128,7 @@ export const SlideEditor: React.FC<{
                             renderSecondaryInspector={editor.transactions.renderNestedEditor}
                         />
                     ) : ''}
-                </div>
+                </InlineToolbar>
             </div>;
         })}
 

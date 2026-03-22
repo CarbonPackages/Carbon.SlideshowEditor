@@ -1,5 +1,6 @@
 import React from "react";
 import {DragContext} from "./DragContext.ts";
+import style from './style.module.css';
 
 export const DRAG_APPLICATION_ID = 'application/carbon-slide-item';
 
@@ -74,6 +75,7 @@ export const DragAndDropSlideItem: React.FC<{
 
     return (
         <div
+            className={style.displayContents}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onDragEnter={handleDragEnter}

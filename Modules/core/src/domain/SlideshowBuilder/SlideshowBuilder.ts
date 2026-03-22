@@ -61,6 +61,12 @@ export class SlideshowBuilder
         return this.data.slideBuilderMap[id];
     }
 
+    public getNumber(id: string): number
+    {
+        this.assertSlideExists(id);
+        return this.data.orderedSlideIds.indexOf(id) + 1;
+    }
+
     public previousSlideId(id: string): string | null
     {
         this.assertSlideExists(id);
@@ -102,6 +108,21 @@ export class SlideshowBuilder
             isDirty: true,
             orderedSlideIds,
         })
+    }
+
+    public withRemovedSlide(slideId: string): SlideshowBuilder
+    {
+        this.assertSlideExists(slideId);
+
+        const {[slideId]: _, ...slideBuilderMap} = this.data.slideBuilderMap;
+        const orderedSlideIds = this.data.orderedSlideIds.filter(id => id !== slideId);
+
+        return new SlideshowBuilder({
+            ...this.data,
+            isDirty: true,
+            slideBuilderMap,
+            orderedSlideIds,
+        });
     }
 
     public withCreatedSlide(id: string | null = null): SlideshowBuilder

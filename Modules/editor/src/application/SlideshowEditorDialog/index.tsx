@@ -7,6 +7,12 @@ import {translate} from '@neos-project/neos-ui-i18n';
 import {createState} from '@neos-project/framework-observable';
 import {EditorComponents, SlideEditor} from "../SlideEditor";
 import style from './style.module.css';
+import {DragAndDropSlideItem, startDraggingSlideItemFactoryFn} from "../DragAndDropSlideItem";
+import {DragItem} from "../InlineToolbar/DragItem.tsx";
+import {DeleteItem} from "../InlineToolbar/DeleteItem.tsx";
+import {InlineToolbar} from "../InlineToolbar";
+import {DragContext} from "../DragAndDropSlideItem/DragContext.ts";
+import mergeClassNames from 'classnames';
 
 export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorComponents: EditorComponents}) => () => {
     const {isOpen, initialValue} = useLatestState(deps.editor.state$);
@@ -46,12 +52,16 @@ const SlideshowEditorDialog: React.FC<{
 
     const isAuthenticated = useSelector(state => !state.system?.authenticationTimeout);
 
+    const dragContext$ = React.useMemo(() => createState(DragContext.none()), []);
+    const dragContext: DragContext = useLatestState(dragContext$);
+
     if (!isAuthenticated) {
         return null;
     }
 
     if (openedSlideId) {
         const slideBuilder = slideshowBuilder.getById(openedSlideId);
+        const slideNumber = slideshowBuilder.getNumber(openedSlideId);
 
         return (
             <Dialog
@@ -59,7 +69,7 @@ const SlideshowEditorDialog: React.FC<{
                 isOpen={true}
                 preventClosing={slideBuilder.isDirty}
                 onRequestClose={backToOverview}
-                title={translate('Todo:todo:todo', 'Edit slide')}
+                title={translate('Todo:todo:todo', 'Edit slide {number}', {number: slideNumber})}
                 style="auto"
                 autoFocus={true}
                 actions={[
@@ -117,14 +127,35 @@ const SlideshowEditorDialog: React.FC<{
             ]}
         >
             <div className={style.dialogBody}>
-                {slideshowBuilder.slides.map((slideBuilder, index) => {
-                    return <div key={slideBuilder.id}>
-                        <Button onClick={() => setOpenedSlideId(slideBuilder.id)}>Open Slide {index + 1}</Button>
-                    </div>
-                })}
+                <div className={style.slideGrid}>
+                    {slideshowBuilder.slides.map((slideBuilder, index) => {
+                        return <div className={style.slideAndSeparator} key={slideBuilder.id}>
+                            <DragAndDropSlideItem targetSlideItemId={slideBuilder.id} dragContext$={dragContext$} moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, slideBuilder.id))}>
+                                <SlideSeparator isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideBuilder.id} />
+                            </DragAndDropSlideItem>
+
+                            <InlineToolbar
+                                label={`Slide ${index + 1}`}
+                                icon={'sticky-note'}
+                                primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideBuilder.id)} />]}
+                                secondaryToolbar={[<DeleteItem key="delete" onDelete={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withRemovedSlide(slideBuilder.id))} />]}
+                            >
+                                <Button className={style.slide} onClick={() => setOpenedSlideId(slideBuilder.id)}>Slide {slideBuilder.id.substring(0, 5)}</Button>
+                            </InlineToolbar>
+                        </div>
+                    })}
+
+                    <DragAndDropSlideItem targetSlideItemId={null} dragContext$={dragContext$} moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, null))}>
+                        <SlideSeparator isDragging={dragContext.isDragging} isDragover={dragContext.isDragoverLast} />
+                    </DragAndDropSlideItem>
+                </div>
 
                 <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}>Add Slide</Button>
             </div>
         </Dialog>
     )
 }
+
+const SlideSeparator = (props: {isDragging: boolean, isDragover: boolean}) => {
+    return <div className={mergeClassNames(style.slideSeparator, {[style.slideSeparatorDragging]: props.isDragging, [style.slideSeparatorDragover]: props.isDragover})}></div>
+};

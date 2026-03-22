@@ -11,32 +11,35 @@ export const InlineToolbar: React.FC<{label: string, icon: string, primaryToolBa
     const popoverId = `carbon-SlideItemToolBar-popover-${id}`;
     const anchorId = `carbon-SlideItemToolBar-anchor-${id}`;
 
-    return <div className={style.contextToolBar} style={{'--carbon-SlideItemToolBar-anchor-name': anchorId}}>
-        <div data-carbon-inline-toolbar>
-            {props.primaryToolBar}
-            <div className={style.toolBar__contextMenuWrapper}>
-                <Button
-                    className={style.contextToolbar__nodeLabel}
-                    title={translate('x:x:x', 'Toggle context menu')}
-                    hoverStyle="brand"
-                    popovertarget={popoverId}
-                    style="transparent"
-                    size="small"
+    return <div className={style.itemAndToolBarContainer}>
+        <div className={style.contextToolBar} style={{'--carbon-SlideItemToolBar-anchor-name': anchorId}}>
+            <div className={style.inlineToolBar}>
+                {props.primaryToolBar}
+                <div className={style.toolBar__contextMenuWrapper}>
+                    <Button
+                        className={style.contextToolbar__nodeLabel}
+                        title={translate('x:x:x', 'Toggle context menu')}
+                        hoverStyle="brand"
+                        popovertarget={popoverId}
+                        style="transparent"
+                        size="small"
+                    >
+                        <Icon icon={props.icon}/>
+                        <span>{props.label}</span>
+                        <Icon icon="ellipsis-vertical"/>
+                    </Button>
+                </div>
+                <div
+                    id={popoverId}
+                    className={style.toolBar__contextMenu}
+                    popover="auto"
                 >
-                    <Icon icon={props.icon}/>
-                    <span>{props.label}</span>
-                    <Icon icon="ellipsis-vertical"/>
-                </Button>
-            </div>
-            <div
-                id={popoverId}
-                className={style.toolBar__contextMenu}
-                popover="auto"
-            >
-                <div className={style.toolBar__btnGroupVertical}>
-                    {props.secondaryToolbar}
+                    <div className={style.toolBar__btnGroupVertical}>
+                        {props.secondaryToolbar}
+                    </div>
                 </div>
             </div>
         </div>
+        {props.children}
     </div>;
 }

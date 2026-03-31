@@ -11,13 +11,16 @@ use Neos\Flow\Aop\JoinPointInterface;
 #[Flow\Aspect()]
 class AssetUsageExtractionAspect
 {
+    /**
+     * @return list<string>
+     */
     #[Flow\Around('method(Neos\Neos\AssetUsage\Service\AssetUsageIndexingService->extractAssetIds())')]
     public function extractAssetIdsFromValueObjects(JoinPointInterface $joinPoint): array
     {
         $nodePropertyValue = $joinPoint->getMethodArgument('value');
         if ($nodePropertyValue instanceof Slideshow) {
             // ToDo fix in core array_unique
-            return array_unique(iterator_to_array($nodePropertyValue->extractAssetIds(), preserve_keys: false));
+            return array_values(array_unique(iterator_to_array($nodePropertyValue->extractAssetIds(), preserve_keys: false)));
         }
         return $joinPoint->getAdviceChain()->proceed($joinPoint);
     }

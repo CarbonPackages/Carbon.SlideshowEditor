@@ -26,7 +26,9 @@ final readonly class VideoSlideItem implements SlideItemInterface
     /** @return iterable<string> */
     public function extractAssetIds(): iterable
     {
-        yield $this->video->thumbnail->id;
+        if ($this->video->thumbnail) {
+            yield $this->video->thumbnail->id;
+        }
     }
 
     /** @return array<int|string,mixed> */

@@ -19,6 +19,10 @@ final class SlideshowNormalizer implements NormalizerInterface, NormalizerAwareI
 {
     use NormalizerAwareTrait;
 
+    /**
+     * @param array<string,mixed> $context
+     * @return array|\ArrayObject<string,mixed>|bool|float|int|mixed|string|null
+     */
     public function normalize(mixed $object, ?string $format = null, array $context = [])
     {
         if ($object instanceof Slideshow || $object instanceof Slide) {

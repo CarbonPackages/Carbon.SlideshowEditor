@@ -12,9 +12,9 @@ export const DeleteItem: React.FC<{onDelete: () => void}> = (props) => {
             hoverStyle="brand"
             style="transparent"
             size="small"
-            title={translate('x:x:x', 'Delete item')}
+            title={translate('Carbon.SlideshowEditor:Main:deleteItem', 'Delete item')}
         >
-            {translate('x:x:x', 'Delete item')}
+            {translate('Carbon.SlideshowEditor:Main:deleteItem', 'Delete item')}
             <Icon icon="trash-alt" />
         </Button>
     );

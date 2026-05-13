@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="" product-name="Carbon.SlideshowEditor" source-language="en" datatype="plaintext" target-language="en">
+    <body>
+      <trans-unit id="editSlideshow" xml:space="preserve">
+        <source>Edit slideshow</source>
+        <target xml:lang="en" state="translated">Edit slideshow</target>
+      </trans-unit>
+      <trans-unit id="createSlideshow" xml:space="preserve">
+        <source>Create slideshow</source>
+        <target xml:lang="en" state="translated">Create slideshow</target>
+      </trans-unit>
+      <trans-unit id="editSlide" xml:space="preserve">
+        <source>Edit slide {number}</source>
+        <target xml:lang="en" state="translated">Edit slide {number}</target>
+      </trans-unit>
+      <trans-unit id="back" xml:space="preserve">
+        <source>Back</source>
+        <target xml:lang="en" state="translated">Back</target>
+      </trans-unit>
+      <trans-unit id="next" xml:space="preserve">
+        <source>Next</source>
+        <target xml:lang="en" state="translated">Next</target>
+      </trans-unit>
+      <trans-unit id="previous" xml:space="preserve">
+        <source>Previous</source>
+        <target xml:lang="en" state="translated">Previous</target>
+      </trans-unit>
+      <trans-unit id="update" xml:space="preserve">
+        <source>Update</source>
+        <target xml:lang="en" state="translated">Update</target>
+      </trans-unit>
+      <trans-unit id="create" xml:space="preserve">
+        <source>Create</source>
+        <target xml:lang="en" state="translated">Create</target>
+      </trans-unit>
+      <trans-unit id="cancel" xml:space="preserve">
+        <source>Cancel</source>
+        <target xml:lang="en" state="translated">Cancel</target>
+      </trans-unit>
+      <trans-unit id="addSlide" xml:space="preserve">
+        <source>Add slide</source>
+        <target xml:lang="en" state="translated">Add slide</target>
+      </trans-unit>
+      <trans-unit id="addFirstSlide" xml:space="preserve">
+        <source>Add first slide</source>
+        <target xml:lang="en" state="translated">Add first slide</target>
+      </trans-unit>
+      <trans-unit id="addText" xml:space="preserve">
+        <source>Add text</source>
+        <target xml:lang="en" state="translated">Add text</target>
+      </trans-unit>
+      <trans-unit id="addImage" xml:space="preserve">
+        <source>Add image</source>
+        <target xml:lang="en" state="translated">Add image</target>
+      </trans-unit>
+      <trans-unit id="addVideo" xml:space="preserve">
+        <source>Add video</source>
+        <target xml:lang="en" state="translated">Add video</target>
+      </trans-unit>
+      <trans-unit id="insertItem" xml:space="preserve">
+        <source>Insert item</source>
+        <target xml:lang="en" state="translated">Insert item</target>
+      </trans-unit>
+      <trans-unit id="toggleContextMenu" xml:space="preserve">
+        <source>Toggle context menu</source>
+        <target xml:lang="en" state="translated">Toggle context menu</target>
+      </trans-unit>
+      <trans-unit id="selectImage" xml:space="preserve">
+        <source>Select image</source>
+        <target xml:lang="en" state="translated">Select image</target>
+      </trans-unit>
+      <trans-unit id="close" xml:space="preserve">
+        <source>Close</source>
+        <target xml:lang="en" state="translated">Close</target>
+      </trans-unit>
+      <trans-unit id="emptySlideshow" xml:space="preserve">
+        <source>No slides yet</source>
+        <target xml:lang="en" state="translated">No slides yet</target>
+      </trans-unit>
+      <trans-unit id="slide" xml:space="preserve">
+        <source>Slide {number}</source>
+        <target xml:lang="en" state="translated">Slide {number}</target>
+      </trans-unit>
+      <trans-unit id="itemImage" xml:space="preserve">
+        <source>Image</source>
+        <target xml:lang="en" state="translated">Image</target>
+      </trans-unit>
+      <trans-unit id="itemVideo" xml:space="preserve">
+        <source>Video</source>
+        <target xml:lang="en" state="translated">Video</target>
+      </trans-unit>
+      <trans-unit id="itemText" xml:space="preserve">
+        <source>Text</source>
+        <target xml:lang="en" state="translated">Text</target>
+      </trans-unit>
+      <trans-unit id="thumbnailMissing" xml:space="preserve">
+        <source>No preview</source>
+        <target xml:lang="en" state="translated">No preview</target>
+      </trans-unit>
+      <trans-unit id="moveItem" xml:space="preserve">
+        <source>Move item</source>
+        <target xml:lang="en" state="translated">Move item</target>
+      </trans-unit>
+      <trans-unit id="deleteItem" xml:space="preserve">
+        <source>Delete item</source>
+        <target xml:lang="en" state="translated">Delete item</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

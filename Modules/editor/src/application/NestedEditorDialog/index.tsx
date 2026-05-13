@@ -15,12 +15,12 @@ export const createNestedEditorDialog = (editor: IEditor) => function NestedEdit
             id="carbon-NestedEditor"
             isOpen={true}
             preventClosing={true}
-            title={translate('Todo:todo:todo', 'Select Image')}
+            title={translate('Carbon.SlideshowEditor:Main:selectImage', 'Select image')}
             style="auto"
             autoFocus={true}
             actions={[
                 <Button onClick={() => editor.transactions.closeNestedEditor()}>
-                    {translate('Todo:todo:todo', 'Schließen')}
+                    {translate('Carbon.SlideshowEditor:Main:close', 'Close')}
                 </Button>,
             ]}
         >

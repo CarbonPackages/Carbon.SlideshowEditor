@@ -5,42 +5,100 @@
 }
 
 .dialogBody {
-    padding-inline: 16px;
+    padding: 16px;
 }
 
-.slideAndSeparator {
-    display: contents;
+.slideCell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: opacity 80ms ease-out;
 }
 
 .slideGrid {
     display: grid;
-    grid-template-columns: min-content 1fr min-content 1fr min-content 1fr;
-    grid-auto-flow: row;
-    row-gap: 20px;
-    column-gap: 10px;
-    margin-top: 25px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px 16px;
+    margin-top: 8px;
+    margin-bottom: 24px;
 }
 
-.slideSeparator {
-    height: 100%;
-    width: 20px;
-    position: relative;
+/* While a drag is in flight, fade non-target cards so the drop indicator
+ * is what stands out. The currently-hovered card is restored to full
+ * opacity by the more-specific `.dropIndicatorDragover` partner styles. */
+.slideGridDragging .slideCell {
+    opacity: 0.55;
 }
 
-.slideSeparatorDragging::after {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 1px;
-    right: 10px;
-    border-left: 2px dashed var(--colors-PrimaryBlue);
+.slideGridDragging .slideCell:hover {
+    opacity: 1;
 }
 
-.slideSeparatorDragover::after {
-    border-left: 2px solid var(--colors-PrimaryBlue);
+/* The drop indicator is a thin horizontal bar that grows in place when an
+ * adjacent slide is being dragged over. The whole `<DragAndDropSlideItem>`
+ * wrapper sits in the natural grid flow, so we don't need a magic column
+ * track for it any more. */
+.dropIndicator {
+    height: 4px;
+    width: 100%;
+    border-radius: 2px;
+    background-color: transparent;
+    margin: -4px 0;
+    transition: background-color 80ms ease-out;
+    pointer-events: none;
 }
 
-.slide {
+.dropIndicatorDragging {
+    background-color: var(--colors-ContrastDark);
+}
 
+.dropIndicatorDragover {
+    background-color: var(--colors-PrimaryBlue);
+}
+
+.dropIndicatorTrailing {
+    grid-column: 1 / -1;
+}
+
+.addSlideButton {
+    margin-top: 8px;
+}
+
+/* Empty-state call to action, used when the slideshow has zero slides. */
+.emptyCta {
+    width: 100%;
+    margin-top: 8px;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 2px dashed var(--colors-ContrastDark);
+    border-radius: 6px;
+    color: var(--colors-ContrastBrightest);
+    cursor: pointer;
+    font-size: var(--fontSize-Small);
+    transition: border-color 80ms ease-out, background-color 80ms ease-out;
+}
+
+.emptyCta:hover,
+.emptyCta:focus-visible {
+    border-color: var(--colors-PrimaryBlue);
+    background-color: var(--colors-ContrastDarker);
+    outline: none;
+}
+
+.emptyCtaIcon {
+    font-size: 28px;
+    color: var(--colors-PrimaryBlue);
+}
+
+.emptyCtaPrimary {
+    font-weight: 600;
+}
+
+.emptyCtaSecondary {
+    color: var(--colors-ContrastBrightest);
+    opacity: 0.65;
 }

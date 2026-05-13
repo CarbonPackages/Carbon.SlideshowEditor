@@ -29,9 +29,15 @@ export const AddSlideItem: React.FC<{
             className={style.addContents}
         >
             <div className={style.addContentsGrid}>
-                <Button popovertarget={popoverId} onClick={() => createdSlideItem(TextSlideItemBuilder.createEmpty())}><Icon icon="paragraph" />&nbsp; Text</Button>
-                <Button popovertarget={popoverId} onClick={() => createdSlideItem(ImageSlideItemBuilder.createEmpty())}><Icon icon="image" />&nbsp; Image</Button>
-                <Button popovertarget={popoverId} onClick={() => createdSlideItem(VideoSlideItemBuilder.createEmpty())}><Icon icon="play" />&nbsp; Video</Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(TextSlideItemBuilder.createEmpty())}>
+                    <Icon icon="paragraph" />&nbsp;{translate('Carbon.SlideshowEditor:Main:addText', 'Add text')}
+                </Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(ImageSlideItemBuilder.createEmpty())}>
+                    <Icon icon="image" />&nbsp;{translate('Carbon.SlideshowEditor:Main:addImage', 'Add image')}
+                </Button>
+                <Button popovertarget={popoverId} onClick={() => createdSlideItem(VideoSlideItemBuilder.createEmpty())}>
+                    <Icon icon="play" />&nbsp;{translate('Carbon.SlideshowEditor:Main:addVideo', 'Add video')}
+                </Button>
             </div>
         </div>
         <IconButton
@@ -40,7 +46,7 @@ export const AddSlideItem: React.FC<{
             style="lighter"
             hoverStyle="brand"
             className={mergeClassNames(style.addButton, {[style.addButtonHover]: isDragover})}
-            title={translate('x:x:x', 'Insert item')}
+            title={translate('Carbon.SlideshowEditor:Main:insertItem', 'Insert item')}
         >
         </IconButton>
     </div>;

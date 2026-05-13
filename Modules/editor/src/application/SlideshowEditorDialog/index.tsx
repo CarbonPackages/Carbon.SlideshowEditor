@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, Dialog} from '@neos-project/react-ui-components';
+import {Button, Dialog, Icon} from '@neos-project/react-ui-components';
 import {IEditor, ISlideshow, SlideshowBuilder} from '@carbon/slideshoweditor-core';
 import {useLatestState} from '@neos-project/framework-observable-react';
 import {useSelector} from '@neos-project/neos-ui-redux-store';
@@ -12,6 +12,7 @@ import {DragItem} from "../InlineToolbar/DragItem.tsx";
 import {DeleteItem} from "../InlineToolbar/DeleteItem.tsx";
 import {InlineToolbar} from "../InlineToolbar";
 import {DragContext} from "../DragAndDropSlideItem/DragContext.ts";
+import {SlideThumbnail} from "../SlideThumbnail";
 import mergeClassNames from 'classnames';
 
 export const createSlideshowEditorDialog = (deps: {editor: IEditor, editorComponents: EditorComponents}) => () => {
@@ -69,12 +70,12 @@ const SlideshowEditorDialog: React.FC<{
                 isOpen={true}
                 preventClosing={slideBuilder.isDirty}
                 onRequestClose={backToOverview}
-                title={translate('Todo:todo:todo', 'Edit slide {number}', {number: slideNumber})}
+                title={translate('Carbon.SlideshowEditor:Main:editSlide', `Edit slide ${slideNumber}`, {number: slideNumber})}
                 style="auto"
                 autoFocus={true}
                 actions={[
                     <Button onClick={backToOverview}>
-                        {translate('Todo:todo:todo', 'Back')}
+                        {translate('Carbon.SlideshowEditor:Main:back', 'Back')}
                     </Button>,
                     <Button
                         id="carbon-SlideshowEditor-submit"
@@ -83,7 +84,7 @@ const SlideshowEditorDialog: React.FC<{
                         onClick={handleSubmit}
                         disabled={!slideshowBuilder.isDirty}
                     >
-                        {initialValue ? translate('Todo:todo:todo', 'Update') : translate('Todo:todo:todo', 'Create')}
+                        {initialValue ? translate('Carbon.SlideshowEditor:Main:update', 'Update') : translate('Carbon.SlideshowEditor:Main:create', 'Create')}
                     </Button>
                 ]}
             >
@@ -92,15 +93,17 @@ const SlideshowEditorDialog: React.FC<{
                 </div>
                 <div className={style.navigationCorner}>
                     <Button onClick={() => setOpenedSlideId(previousSlideId)} disabled={!previousSlideId}>
-                        {translate('Todo:todo:todo', 'Previous')}
+                        {translate('Carbon.SlideshowEditor:Main:previous', 'Previous')}
                     </Button>
                     <Button onClick={() => setOpenedSlideId(nextSlideId)} disabled={!nextSlideId}>
-                        {translate('Todo:todo:todo', 'Next')}
+                        {translate('Carbon.SlideshowEditor:Main:next', 'Next')}
                     </Button>
                 </div>
             </Dialog>
         );
     }
+
+    const hasSlides = slideshowBuilder.slides.length > 0;
 
     return (
         <Dialog
@@ -108,12 +111,12 @@ const SlideshowEditorDialog: React.FC<{
             isOpen={true}
             preventClosing={slideshowBuilder.isDirty}
             onRequestClose={dismiss}
-            title={initialValue ? translate('Todo:todo:todo', 'Edit slideshow') : translate('Todo:todo:todo', 'Create slideshow')}
+            title={initialValue ? translate('Carbon.SlideshowEditor:Main:editSlideshow', 'Edit slideshow') : translate('Carbon.SlideshowEditor:Main:createSlideshow', 'Create slideshow')}
             style="auto"
             autoFocus={true}
             actions={[
                 <Button onClick={dismiss}>
-                    {translate('Todo:todo:todo', 'Cancel')}
+                    {translate('Carbon.SlideshowEditor:Main:cancel', 'Cancel')}
                 </Button>,
                 <Button
                     id="carbon-SlideshowEditor-submit"
@@ -122,40 +125,84 @@ const SlideshowEditorDialog: React.FC<{
                     onClick={handleSubmit}
                     disabled={!slideshowBuilder.isDirty}
                 >
-                    {initialValue ? translate('Todo:todo:todo', 'Update') : translate('Todo:todo:todo', 'Create')}
+                    {initialValue ? translate('Carbon.SlideshowEditor:Main:update', 'Update') : translate('Carbon.SlideshowEditor:Main:create', 'Create')}
                 </Button>
             ]}
         >
             <div className={style.dialogBody}>
-                <div className={style.slideGrid}>
-                    {slideshowBuilder.slides.map((slideBuilder, index) => {
-                        return <div className={style.slideAndSeparator} key={slideBuilder.id}>
-                            <DragAndDropSlideItem targetSlideItemId={slideBuilder.id} dragContext$={dragContext$} moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, slideBuilder.id))}>
-                                <SlideSeparator isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideBuilder.id} />
-                            </DragAndDropSlideItem>
-
-                            <InlineToolbar
-                                label={`Slide ${index + 1}`}
-                                icon={'sticky-note'}
-                                primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideBuilder.id)} />]}
-                                secondaryToolbar={[<DeleteItem key="delete" onDelete={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withRemovedSlide(slideBuilder.id))} />]}
+                {hasSlides ? (
+                    <div className={mergeClassNames(style.slideGrid, {[style.slideGridDragging]: dragContext.isDragging})}>
+                        {slideshowBuilder.slides.map((slideBuilder, index) => {
+                            const slideNumber = index + 1;
+                            return <div
+                                className={style.slideCell}
+                                data-slide-card={slideBuilder.id}
+                                key={slideBuilder.id}
                             >
-                                <Button className={style.slide} onClick={() => setOpenedSlideId(slideBuilder.id)}>Slide {slideBuilder.id.substring(0, 5)}</Button>
-                            </InlineToolbar>
-                        </div>
-                    })}
+                                <DragAndDropSlideItem
+                                    targetSlideItemId={slideBuilder.id}
+                                    dragContext$={dragContext$}
+                                    moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, slideBuilder.id))}
+                                >
+                                    <SlideDropIndicator isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideBuilder.id} />
+                                </DragAndDropSlideItem>
+                                <InlineToolbar
+                                    label={translate('Carbon.SlideshowEditor:Main:slide', `Slide ${slideNumber}`, {number: slideNumber})}
+                                    icon={'sticky-note'}
+                                    primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideBuilder.id)} />]}
+                                    secondaryToolbar={[<DeleteItem key="delete" onDelete={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withRemovedSlide(slideBuilder.id))} />]}
+                                >
+                                    <SlideThumbnail
+                                        slideBuilder={slideBuilder}
+                                        index={index}
+                                        onSelect={() => setOpenedSlideId(slideBuilder.id)}
+                                    />
+                                </InlineToolbar>
+                            </div>
+                        })}
+                        <DragAndDropSlideItem
+                            targetSlideItemId={null}
+                            dragContext$={dragContext$}
+                            moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, null))}
+                        >
+                            <SlideDropIndicator isDragging={dragContext.isDragging} isDragover={dragContext.isDragoverLast} isTrailing />
+                        </DragAndDropSlideItem>
+                    </div>
+                ) : (
+                    <button
+                        type="button"
+                        className={style.emptyCta}
+                        onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}
+                    >
+                        <Icon icon="plus" className={style.emptyCtaIcon} />
+                        <span className={style.emptyCtaPrimary}>{translate('Carbon.SlideshowEditor:Main:addFirstSlide', 'Add first slide')}</span>
+                        <span className={style.emptyCtaSecondary}>{translate('Carbon.SlideshowEditor:Main:emptySlideshow', 'No slides yet')}</span>
+                    </button>
+                )}
 
-                    <DragAndDropSlideItem targetSlideItemId={null} dragContext$={dragContext$} moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, null))}>
-                        <SlideSeparator isDragging={dragContext.isDragging} isDragover={dragContext.isDragoverLast} />
-                    </DragAndDropSlideItem>
-                </div>
-
-                <Button onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}>Add Slide</Button>
+                {hasSlides ? (
+                    <Button
+                        className={style.addSlideButton}
+                        onClick={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withCreatedSlide())}
+                    >
+                        <Icon icon="plus" />&nbsp;
+                        {translate('Carbon.SlideshowEditor:Main:addSlide', 'Add slide')}
+                    </Button>
+                ) : null}
             </div>
         </Dialog>
     )
 }
 
-const SlideSeparator = (props: {isDragging: boolean, isDragover: boolean}) => {
-    return <div className={mergeClassNames(style.slideSeparator, {[style.slideSeparatorDragging]: props.isDragging, [style.slideSeparatorDragover]: props.isDragover})}></div>
-};
+const SlideDropIndicator: React.FC<{isDragging: boolean; isDragover: boolean; isTrailing?: boolean}> = (props) => (
+    <div
+        className={mergeClassNames(
+            style.dropIndicator,
+            {
+                [style.dropIndicatorDragging]: props.isDragging,
+                [style.dropIndicatorDragover]: props.isDragover,
+                [style.dropIndicatorTrailing]: props.isTrailing
+            }
+        )}
+    />
+);

@@ -18,7 +18,7 @@ export const InlineToolbar: React.FC<{label: string, icon: string, primaryToolBa
                 <div className={style.toolBar__contextMenuWrapper}>
                     <Button
                         className={style.contextToolbar__nodeLabel}
-                        title={translate('x:x:x', 'Toggle context menu')}
+                        title={translate('Carbon.SlideshowEditor:Main:toggleContextMenu', 'Toggle context menu')}
                         hoverStyle="brand"
                         popovertarget={popoverId}
                         style="transparent"

@@ -134,31 +134,39 @@ const SlideshowEditorDialog: React.FC<{
                     <div className={mergeClassNames(style.slideGrid, {[style.slideGridDragging]: dragContext.isDragging})}>
                         {slideshowBuilder.slides.map((slideBuilder, index) => {
                             const slideNumber = index + 1;
-                            return <div
-                                className={style.slideCell}
-                                data-slide-card={slideBuilder.id}
+                            return <DragAndDropSlideItem
                                 key={slideBuilder.id}
+                                targetSlideItemId={slideBuilder.id}
+                                dragContext$={dragContext$}
+                                moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, slideBuilder.id))}
                             >
-                                <DragAndDropSlideItem
-                                    targetSlideItemId={slideBuilder.id}
-                                    dragContext$={dragContext$}
-                                    moveSlideItem={(slideId: string) => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withMovedSlide(slideId, slideBuilder.id))}
+                                <div
+                                    className={style.slideCell}
+                                    data-slide-card={slideBuilder.id}
                                 >
                                     <SlideDropIndicator isDragging={dragContext.isDragging} isDragover={dragContext.dragoverId === slideBuilder.id} />
-                                </DragAndDropSlideItem>
-                                <InlineToolbar
-                                    label={translate('Carbon.SlideshowEditor:Main:slide', `Slide ${slideNumber}`, {number: slideNumber})}
-                                    icon={'sticky-note'}
-                                    primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideBuilder.id)} />]}
-                                    secondaryToolbar={[<DeleteItem key="delete" onDelete={() => slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withRemovedSlide(slideBuilder.id))} />]}
-                                >
-                                    <SlideThumbnail
-                                        slideBuilder={slideBuilder}
-                                        index={index}
-                                        onSelect={() => setOpenedSlideId(slideBuilder.id)}
-                                    />
-                                </InlineToolbar>
-                            </div>
+                                    <InlineToolbar
+                                        label={translate('Carbon.SlideshowEditor:Main:slide', `Slide ${slideNumber}`, {number: slideNumber})}
+                                        icon={'sticky-note'}
+                                        primaryToolBar={[<DragItem key="drag" dragContext$={dragContext$} startDragging={startDraggingSlideItemFactoryFn(slideBuilder.id)} />]}
+                                        secondaryToolbar={[<DeleteItem
+                                            key="delete"
+                                            label={translate('Carbon.SlideshowEditor:Main:deleteSlide', `Delete slide ${slideNumber}`, {number: slideNumber})}
+                                            onDelete={() => {
+                                                if (window.confirm(`Delete slide ${slideNumber}? Its contents will be removed; undo by cancelling the slideshow editor.`)) {
+                                                    slideshowBuilder$.update(slideshowBuilder => slideshowBuilder.withRemovedSlide(slideBuilder.id));
+                                                }
+                                            }}
+                                        />]}
+                                    >
+                                        <SlideThumbnail
+                                            slideBuilder={slideBuilder}
+                                            index={index}
+                                            onSelect={() => setOpenedSlideId(slideBuilder.id)}
+                                        />
+                                    </InlineToolbar>
+                                </div>
+                            </DragAndDropSlideItem>
                         })}
                         <DragAndDropSlideItem
                             targetSlideItemId={null}

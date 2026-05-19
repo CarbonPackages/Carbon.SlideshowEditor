@@ -1,15 +1,16 @@
 import * as React from 'react';
+import backend from '@neos-project/neos-ui-backend-connector';
 
 /**
- * Resolves a Neos Media asset UUID to its preview URL by calling the
- * Neos service route at `/neos/service/assets/{uuid}.json`. Result is
- * cached in a module-level Map keyed by uuid, so opening the same
- * slideshow twice — or showing the same image across siblings —
- * doesn't double-fetch.
+ * Resolves a Neos Media image UUID to its thumbnail URL via the Neos UI
+ * backend connector's `loadImageMetadata` endpoint — the same primitive
+ * the built-in `Neos.Neos/Inspector/Editors/ImageEditor` uses to render
+ * its own preview. Result is cached in a module-level Map keyed by uuid
+ * so siblings sharing an image don't double-fetch.
  *
- * The endpoint exposes `previewUri` (via the `Neos.Media.Browser:Thumbnail`
- * preset) plus title + asset type — enough to render a 16:9 card with
- * the image and a label.
+ * Using the connector instead of a hand-rolled fetch keeps us aligned
+ * with Neos's route configuration, CSRF wrapping, and credentials
+ * handling automatically.
  */
 
 type AssetPreviewState =
@@ -29,27 +30,15 @@ const notify = (entry: CacheEntry) => {
 const fetchAsset = async (uuid: string): Promise<void> => {
     const entry = cache.get(uuid)!;
     try {
-        const res = await fetch(`/neos/service/assets/${encodeURIComponent(uuid)}.json`, {
-            credentials: 'include',
-            headers: {Accept: 'application/json'}
-        });
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        // The Neos service response wraps the asset under a top-level key. Walk
-        // defensively — different Neos versions / handlers shape it slightly
-        // differently (sometimes `{ "asset": { previewUri, label } }`,
-        // sometimes flat `{ previewUri, label }`).
-        const node = (data?.asset ?? data) as Record<string, unknown> | null;
-        const previewUri = typeof node?.previewUri === 'string'
-            ? node.previewUri as string
-            : (typeof node?.previewImageResourceUri === 'string' ? node.previewImageResourceUri as string : null);
-        const label = typeof node?.label === 'string'
-            ? node.label as string
-            : (typeof node?.title === 'string' ? node.title as string : '');
+        const data = await (backend as {get: () => {endpoints: {loadImageMetadata: (uuid: string) => Promise<unknown>}}})
+            .get().endpoints.loadImageMetadata(uuid) as Record<string, unknown> | null;
+        const previewUri = typeof data?.previewImageResourceUri === 'string'
+            ? data.previewImageResourceUri as string
+            : (typeof data?.originalImageResourceUri === 'string' ? data.originalImageResourceUri as string : null);
+        const objectNode = data?.object as Record<string, unknown> | undefined;
+        const label = typeof objectNode?.title === 'string' ? objectNode.title as string : '';
         if (!previewUri) {
-            throw new Error('No previewUri in response');
+            throw new Error('No previewImageResourceUri in response');
         }
         Object.assign(entry, {state: 'ready', previewUri, label});
     } catch {

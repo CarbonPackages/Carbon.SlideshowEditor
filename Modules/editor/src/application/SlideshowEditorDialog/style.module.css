@@ -34,10 +34,9 @@
     opacity: 1;
 }
 
-/* The drop indicator is a thin horizontal bar that grows in place when an
- * adjacent slide is being dragged over. The whole `<DragAndDropSlideItem>`
- * wrapper sits in the natural grid flow, so we don't need a magic column
- * track for it any more. */
+/* The drop indicator is a thin horizontal bar at the top of each card,
+ * purely visual feedback for where a drop will land. Drop *events* are
+ * caught by the surrounding `<DragAndDropSlideItem>` wrapping the cell. */
 .dropIndicator {
     height: 4px;
     width: 100%;
@@ -56,8 +55,17 @@
     background-color: var(--colors-PrimaryBlue);
 }
 
+/* The trailing indicator is its own grid row and IS the drop zone for
+ * "place at end" — give it real height and pointer-events so it can be
+ * targeted comfortably while a drag is in flight. */
 .dropIndicatorTrailing {
     grid-column: 1 / -1;
+    pointer-events: auto;
+}
+
+.slideGridDragging .dropIndicatorTrailing {
+    height: 24px;
+    margin: -12px 0;
 }
 
 .addSlideButton {

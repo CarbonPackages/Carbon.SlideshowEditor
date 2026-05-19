@@ -9,7 +9,10 @@ export const InlineToolbar: React.FC<{label: string, icon: string, primaryToolBa
     const id = React.useMemo(() => ++globalId, []);
 
     const popoverId = `carbon-SlideItemToolBar-popover-${id}`;
-    const anchorId = `carbon-SlideItemToolBar-anchor-${id}`;
+    // CSS `anchor-name` must be a <dashed-ident> (lead with `--`), otherwise
+    // both `anchor-name` and `position-anchor` are dropped and the popover
+    // anchor()s fall back to a viewport-corner default.
+    const anchorId = `--carbon-SlideItemToolBar-anchor-${id}`;
 
     return <div className={style.itemAndToolBarContainer}>
         <div className={style.contextToolBar} style={{'--carbon-SlideItemToolBar-anchor-name': anchorId}}>

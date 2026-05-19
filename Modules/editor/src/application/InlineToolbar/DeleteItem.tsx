@@ -3,18 +3,17 @@ import {Button, Icon} from '@neos-project/react-ui-components';
 import style from "./style.module.css";
 import {translate} from '@neos-project/neos-ui-i18n';
 
-export const DeleteItem: React.FC<{onDelete: () => void}> = (props) => {
+export const DeleteItem: React.FC<{onDelete: () => void; label?: string}> = (props) => {
+    const label = props.label ?? translate('Carbon.SlideshowEditor:Main:deleteItem', 'Delete item');
     return (
         <Button
-            id="neos-InlineToolbar-DeleteSelectedNode"
             className={style.toolBar__btnGroup__btn}
             onClick={props.onDelete}
             hoverStyle="brand"
             style="transparent"
             size="small"
-            title={translate('Carbon.SlideshowEditor:Main:deleteItem', 'Delete item')}
         >
-            {translate('Carbon.SlideshowEditor:Main:deleteItem', 'Delete item')}
+            {label}
             <Icon icon="trash-alt" />
         </Button>
     );

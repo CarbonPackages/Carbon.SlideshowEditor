@@ -1,6 +1,7 @@
 {
   "name": "@carbon/slideshoweditor",
   "private": true,
+  "license": "GNU GPLv3",
   "scripts": {
     "lint": "tsc --noemit",
     "build": "yarn workspace @carbon/slideshoweditor-plugin run build",

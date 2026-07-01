@@ -1,11 +1,10 @@
 {
-    "description": "",
+    "description": "Neos package that provides a slideshow value object and a custom Neos UI inspector editor for creating and editing slideshows",
     "type": "neos-carbon",
     "name": "carbon/slideshoweditor",
-    "version": "1.0.0",
     "license": "GPL-3.0-or-later",
     "require": {
-        "neos/neos-ui": "~9.1.4",
+        "neos/neos-ui": "~9.1.4 || ~9.2",
         "carbon/videoplatformeditor": "^1.0"
     },
     "autoload": {

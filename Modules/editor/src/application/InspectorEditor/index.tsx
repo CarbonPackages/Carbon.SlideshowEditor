@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from '@neos-project/react-ui-components';
 import type {IEditor, ISlideshow} from '@carbon/slideshoweditor-core';
+import {translate} from '@neos-project/neos-ui-i18n';
 
 export const createInspectorEditor = (deps: {editor: IEditor}) => {
 
@@ -17,7 +18,11 @@ export const createInspectorEditor = (deps: {editor: IEditor}) => {
         }, [props.value, props.commit]);
 
         return <>
-            <Button onClick={onClick}>Open</Button>
+            <Button onClick={onClick}>
+                {props.value?.length
+                    ? translate('Carbon.SlideshowEditor:Main:editSlideshowWithSlides', ['Edit slideshow ({0}) slide', 'Edit slideshow ({0}) slides'], [props.value.length], props.value.length)
+                    : translate('Carbon.SlideshowEditor:Main:createSlideshow', 'Create slideshow')}
+            </Button>
         </>
     }
 }

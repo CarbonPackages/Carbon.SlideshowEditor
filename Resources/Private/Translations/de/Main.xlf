@@ -6,6 +6,16 @@
         <source>Edit slideshow</source>
         <target xml:lang="de" state="translated">Klickstrecke bearbeiten</target>
       </trans-unit>
+      <group id="editSlideshowWithSlides" restype="x-gettext-plurals">
+        <trans-unit id="editSlideshowWithSlides[0]" xml:space="preserve">
+          <source>Edit slideshow ({0}) slide</source>
+          <target xml:lang="de">Klickstrecke bearbeiten ({0}) slide</target>
+        </trans-unit>
+        <trans-unit id="editSlideshowWithSlides[1]" xml:space="preserve">
+          <source>Edit slideshow ({0}) slides</source>
+          <target xml:lang="de">Klickstrecke bearbeiten ({0}) slides</target>
+        </trans-unit>
+      </group>
       <trans-unit id="createSlideshow" xml:space="preserve">
         <source>Create slideshow</source>
         <target xml:lang="de" state="translated">Klickstrecke anlegen</target>

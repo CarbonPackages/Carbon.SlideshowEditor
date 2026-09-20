@@ -6,6 +6,14 @@
         <source>Edit slideshow</source>
         <target xml:lang="en" state="translated">Edit slideshow</target>
       </trans-unit>
+      <group id="editSlideshowWithSlides" restype="x-gettext-plurals">
+        <trans-unit id="editSlideshowWithSlides[0]" xml:space="preserve">
+          <source>Edit slideshow ({0}) slide</source>
+        </trans-unit>
+        <trans-unit id="editSlideshowWithSlides[1]" xml:space="preserve">
+          <source>Edit slideshow ({0}) slides</source>
+        </trans-unit>
+      </group>
       <trans-unit id="createSlideshow" xml:space="preserve">
         <source>Create slideshow</source>
         <target xml:lang="en" state="translated">Create slideshow</target>
